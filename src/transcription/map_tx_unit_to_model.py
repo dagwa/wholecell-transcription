@@ -50,6 +50,19 @@ class MakeStateNameFac:
       return MakeStateNamePerLocus()
 
 class RNApState(object):
+  def __init__(self, desc):
+    self.desc = desc
+
+  def __repr__(self):
+    return self.desc
+
+  def __str__(self):
+    return self.__repr__()
+
+class RNApBoundState(RNApState):
+  pass
+
+class RNApSpecBoundState(RNApBoundState):
   def __init__(self, tx_unit, direction, active, desc):
     self.tx_unit = tx_unit
     self.direction = direction
@@ -62,9 +75,9 @@ class RNApState(object):
   def __str__(self):
     return self.__repr__()
 
-class RNApStatePerLocus(RNApState):
+class RNApSpecBoundStatePerLocus(RNApSpecBoundState):
   def __init__(self, tx_unit, locus, direction, active, desc):
-    super(RNApStatePerLocus, self).__init__(tx_unit, direction, active, desc)
+    super(RNApSpecBoundStatePerLocus, self).__init__(tx_unit, direction, active, desc)
     self.locus = locus
 
   def __repr__(self):
@@ -97,8 +110,11 @@ with open(args.genes[0]) as gene_f:
 # States for RNAp
 active_RNAp = []
 spec_bound_RNAp = []
-ns_bound_RNAp = []
-free_RNAp = []
+ns_bound_RNAp = RNApBoundState('RNAp_NonSpecBound')
+free_RNAp = RNApState('RNAp_Free')
+
+def RNAp_states():
+  return active_RNAp + spec_bound_RNAp + [ns_bound_RNAp] + [free_RNAp]
 
 #for i in args.input:
 with open(args.tx_units[0]) as tx_f:
@@ -115,26 +131,20 @@ with open(args.tx_units[0]) as tx_f:
   # Get gene names, properties
   for row in tu_reader:
     try:
-      tu_name = row[namecol].replace(' ', '_').replace('-', 'X')
+      tu_name = row[namecol].replace(' ', '_').replace('-', 'X').replace(',', '_')
       tu_length = int(row[lengthcol])
       #print(', '.join([row[0], tu_name, str(tu_length)]))
 
       def make_states(tx_unit, locus, direction, active):
         if locus is not None:
-          active_state = RNApStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = act, desc = 'active')
-          spec_bound_state = RNApStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = act, desc = 'spec_bound')
-          ns_bound_state = RNApStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = act, desc = 'ns_bound')
-          free_state = RNApStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = act, desc = 'free')
+          active_state = RNApSpecBoundStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = act, desc = 'active')
+          spec_bound_state = RNApSpecBoundStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = act, desc = 'spec_bound')
         else:
-          active_state = RNApState(tx_unit = tu_name, direction = direc, active = act, desc = 'active')
-          spec_bound_state = RNApState(tx_unit = tu_name, direction = direc, active = act, desc = 'spec_bound')
-          ns_bound_state = RNApState(tx_unit = tu_name, direction = direc, active = act, desc = 'ns_bound')
-          free_state = RNApState(tx_unit = tu_name, direction = direc, active = act, desc = 'free')
+          active_state = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = act, desc = 'active')
+          spec_bound_state = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = act, desc = 'spec_bound')
 
         active_RNAp.append(active_state)
         spec_bound_RNAp.append(spec_bound_state)
-        ns_bound_RNAp.append(ns_bound_state)
-        free_RNAp.append(free_state)
 
       for direc in direc_range():
         for act in [True, False]:
@@ -160,15 +170,15 @@ def check(value, message):
   libSBML explaining the meaning of the code, and exits with status code 1.
   """
   if value == None:
-    raise SystemExit('LibSBML returned a null value trying to ' + message + '.')
+    raise RuntimeError('LibSBML returned a null value trying to ' + message + '.')
   elif type(value) is int:
     if value == libsbml.LIBSBML_OPERATION_SUCCESS:
       return
     else:
       err_msg = 'Error encountered trying to ' + message + '.' \
         + 'LibSBML returned error code ' + str(value) + ': "' \
-        + OperationReturnValue_toString(value).strip() + '"'
-      raise SystemExit(err_msg)
+        + libsbml.OperationReturnValue_toString(value).strip() + '"'
+      raise RuntimeError(err_msg)
   else:
     return
 
@@ -198,6 +208,19 @@ check(c1.setConstant(True), 'set compartment "constant"')
 check(c1.setSize(1), 'set compartment "size"')
 check(c1.setSpatialDimensions(3), 'set compartment dimensions')
 check(c1.setUnits('litre'), 'set compartment size units')
+
+for RNAp_state in RNAp_states():
+  spec = model.createSpecies()
+  check(spec, 'create species spec')
+  idstr = repr(RNAp_state)
+  #print(idstr)
+  check(spec.setId(idstr), 'set species spec id')
+  check(spec.setCompartment('c1'), 'set species spec compartment')
+  check(spec.setConstant(False), 'set "constant" attribute on spec')
+  check(spec.setInitialAmount(0), 'set initial amount for spec')
+  check(spec.setSubstanceUnits('mole'), 'set substance units for spec')
+  check(spec.setBoundaryCondition(False), 'set "boundaryCondition" on spec')
+  check(spec.setHasOnlySubstanceUnits(False), 'set "hasOnlySubstanceUnits" on spec')
 
 sbmlstr = libsbml.writeSBMLToString(document)
 with open('/tmp/tx.sbml', 'w') as f:
