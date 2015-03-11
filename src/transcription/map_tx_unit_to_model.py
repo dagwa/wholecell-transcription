@@ -4,8 +4,10 @@ import csv
 import libsbml
 
 parser = argparse.ArgumentParser(description='Map genes to model.')
-parser.add_argument('input', metavar='I', type=str, nargs='+',
-                    help='Input files')
+#parser.add_argument('input', metavar='I', type=str, nargs='+',
+                    #help='Input files')
+parser.add_argument('--tx-units', dest='tx_units', nargs=1, help='Transcription units CSV')
+parser.add_argument('--genes', dest='genes', nargs=1, help='Genes units CSV')
 
 args = parser.parse_args()
 
@@ -75,57 +77,76 @@ def direc_range():
   '''
   return [0,1]
 
-for i in args.input:
-  with open(i) as f:
-    # Read CSV
-    reader = csv.reader(f)
-    
-    # Data columns
-    namecol = 1
-    lengthcol = 5
+gene_seq = {}
+# Construct gene sequences
+with open(args.genes[0]) as gene_f:
+  gene_reader = csv.reader(gene_f)
 
-    # States for RNAp
-    active_RNAp = []
-    spec_bound_RNAp = []
-    ns_bound_RNAp = []
-    free_RNAp = []
+  # Columns for data
+  name_col = 0
+  seq_col = 22
 
-    # Antimony model str
-    antmdl = ''
+  # Read rows
+  for row in gene_reader:
+    name = row[name_col]
+    seq = row[seq_col]
+    print(seq)
 
-    # Get gene names, properties
-    for row in reader:
-      try:
-        tu_name = row[namecol].replace(' ', '_').replace('-', 'X')
-        tu_length = int(row[lengthcol])
-        #print(', '.join([row[0], tu_name, str(tu_length)]))
+    gene_seq[name] = seq
 
-        def make_states(tx_unit, locus, direction, active):
-          if locus is not None:
-            active_state = RNApStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = act, desc = 'active')
-            spec_bound_state = RNApStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = act, desc = 'spec_bound')
-            ns_bound_state = RNApStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = act, desc = 'ns_bound')
-            free_state = RNApStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = act, desc = 'free')
+# States for RNAp
+active_RNAp = []
+spec_bound_RNAp = []
+ns_bound_RNAp = []
+free_RNAp = []
+
+#for i in args.input:
+with open(args.tx_units[0]) as tx_f:
+  # Read CSV
+  tu_reader = csv.reader(tx_f)
+
+  # Data columns
+  namecol = 1
+  lengthcol = 5
+
+  # Antimony model str
+  antmdl = ''
+
+  # Get gene names, properties
+  for row in tu_reader:
+    try:
+      tu_name = row[namecol].replace(' ', '_').replace('-', 'X')
+      tu_length = int(row[lengthcol])
+      #print(', '.join([row[0], tu_name, str(tu_length)]))
+
+      def make_states(tx_unit, locus, direction, active):
+        if locus is not None:
+          active_state = RNApStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = act, desc = 'active')
+          spec_bound_state = RNApStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = act, desc = 'spec_bound')
+          ns_bound_state = RNApStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = act, desc = 'ns_bound')
+          free_state = RNApStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = act, desc = 'free')
+        else:
+          active_state = RNApState(tx_unit = tu_name, direction = direc, active = act, desc = 'active')
+          spec_bound_state = RNApState(tx_unit = tu_name, direction = direc, active = act, desc = 'spec_bound')
+          ns_bound_state = RNApState(tx_unit = tu_name, direction = direc, active = act, desc = 'ns_bound')
+          free_state = RNApState(tx_unit = tu_name, direction = direc, active = act, desc = 'free')
+
+        active_RNAp.append(active_state)
+        spec_bound_RNAp.append(spec_bound_state)
+        ns_bound_RNAp.append(ns_bound_state)
+        free_RNAp.append(free_state)
+
+      for direc in direc_range():
+        for act in [True, False]:
+          if perLocus:
+            for k in range(tu_length):
+              make_states(tu_name, k, direc, act)
           else:
-            active_state = RNApState(tx_unit = tu_name, direction = direc, active = act, desc = 'active')
-            spec_bound_state = RNApState(tx_unit = tu_name, direction = direc, active = act, desc = 'spec_bound')
-            ns_bound_state = RNApState(tx_unit = tu_name, direction = direc, active = act, desc = 'ns_bound')
-            free_state = RNApState(tx_unit = tu_name, direction = direc, active = act, desc = 'free')
+            make_states(tu_name, None, direc, act)
+    except ValueError:
+      # Discard header row etc.
+      pass
 
-          active_RNAp.append(active_state)
-          spec_bound_RNAp.append(spec_bound_state)
-          ns_bound_RNAp.append(ns_bound_state)
-          free_RNAp.append(free_state)
+  print('active states {}'.format(active_RNAp))
 
-        for direc in direc_range():
-          for act in [True, False]:
-            if perLocus:
-              for k in range(tu_length):
-                make_states(tu_name, k, direc, act)
-            else:
-              make_states(tu_name, None, direc, act)
-      except ValueError:
-        # Discard header row etc.
-        pass
-
-    print('active states {}'.format(active_RNAp))
+document = libsbml.SBMLDocument(3, 1)
