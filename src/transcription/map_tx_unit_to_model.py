@@ -134,12 +134,11 @@ with open(args.tx_units[0]) as tx_f:
     try:
       tu_name = row[namecol].replace(' ', '_').replace('-', 'X').replace(',', '_')
       tu_genes = [x.strip() for x in row[genescol].split(',')]
-      #print(tu_genes)
       tu_length = int(row[lengthcol])
 
       tu_seq = ''.join([x for x in [gene_seq[g] for g in tu_genes]])
+      tu_seq = tu_seq.replace('T', 'U') # DNA seq -> RNA seq
       print(tu_seq)
-      #print(', '.join([row[0], tu_name, str(tu_length)]))
 
       def make_states(tx_unit, locus, direction, active):
         if locus is not None:
