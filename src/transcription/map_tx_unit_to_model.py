@@ -13,7 +13,7 @@ args = parser.parse_args()
 perLocus = False
 
 class MakeStateName(object):
-  def __call__(tx_unit, direction, active):
+  def __call__(self, desc, tx_unit, direction, active):
     '''
     Make ID name for given state of polymerase
 
@@ -24,10 +24,10 @@ class MakeStateName(object):
     :returns: the identifier for the given RNAp state
     '''
 
-    return 'tu{}_dir{}_act{}'.format(tx_unit, direction, active)
+    return '{}_tu{}_dir{}_act{}'.format(desc, tx_unit, direction, active)
 
 class MakeStateNamePerLocus(MakeStateName):
-  def __call__(tx_unit, locus, direction, active):
+  def __call__(self, desc, tx_unit, locus, direction, active):
     '''
     Make ID name for given state of polymerase
 
@@ -38,7 +38,7 @@ class MakeStateNamePerLocus(MakeStateName):
     :returns: the identifier for the given RNAp state
     '''
 
-    return 'tu{}_loc_{}_dir{}_act{}'.format(tx_unit, locus, direction, active)
+    return '{}_tu{}_loc_{}_dir{}_act{}'.format(desc, tx_unit, locus, direction, active)
 
 class MakeStateNameFac:
   def __call__(self):
@@ -54,10 +54,19 @@ class RNApState(object):
     self.active = active
     self.desc = desc
 
+  def __repr__(self):
+    return MakeStateName()(self.desc, self.tx_unit, self.direction, self.active)
+
+  def __str__(self):
+    return self.__repr__()
+
 class RNApStatePerLocus(RNApState):
   def __init__(self, tx_unit, locus, direction, active, desc):
     super(RNApStatePerLocus, self).__init__(tx_unit, direction, active, desc)
     self.locus = locus
+
+  def __repr__(self):
+    return MakeStateNamePerLocus()(self.desc, self.tx_unit, self.locus, self.direction, self.active)
 
 
 def direc_range():
@@ -119,4 +128,4 @@ for i in args.input:
         # Discard header row etc.
         pass
 
-      #print('active states {}'.format(active_RNAp))
+    print('active states {}'.format(active_RNAp))
