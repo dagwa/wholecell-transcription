@@ -123,6 +123,7 @@ with open(args.tx_units[0]) as tx_f:
 
   # Data columns
   namecol = 1
+  genescol = 3
   lengthcol = 5
 
   # Antimony model str
@@ -132,7 +133,12 @@ with open(args.tx_units[0]) as tx_f:
   for row in tu_reader:
     try:
       tu_name = row[namecol].replace(' ', '_').replace('-', 'X').replace(',', '_')
+      tu_genes = [x.strip() for x in row[genescol].split(',')]
+      #print(tu_genes)
       tu_length = int(row[lengthcol])
+
+      tu_seq = ''.join([x for x in [gene_seq[g] for g in tu_genes]])
+      print(tu_seq)
       #print(', '.join([row[0], tu_name, str(tu_length)]))
 
       def make_states(tx_unit, locus, direction, active):
@@ -157,7 +163,7 @@ with open(args.tx_units[0]) as tx_f:
       # Discard header row etc.
       pass
 
-  print('active states {}'.format(active_RNAp))
+  #print('active states {}'.format(active_RNAp))
 
 # create SBML model
 
