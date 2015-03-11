@@ -1,0 +1,991 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">
+  <model id="aModel">
+    <listOfUnitDefinitions>
+      <unitDefinition id="substance" name="substance">
+        <listOfUnits>
+          <unit kind="item" exponent="1" scale="0" multiplier="1"/>
+        </listOfUnits>
+      </unitDefinition>
+    </listOfUnitDefinitions>
+    <listOfCompartments>
+      <compartment id="C1" size="1"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="TU_001" name="TU_001" compartment="C1" initialConcentration="1"/>
+      <species id="TU_002" name="TU_002" compartment="C1" initialConcentration="1"/>
+      <species id="TU_003" name="TU_003" compartment="C1" initialConcentration="1"/>
+      <species id="TU_004" name="TU_004" compartment="C1" initialConcentration="1"/>
+      <species id="TU_005" name="TU_005" compartment="C1" initialConcentration="1"/>
+      <species id="TU_006" name="TU_006" compartment="C1" initialConcentration="1"/>
+      <species id="TU_007" name="TU_007" compartment="C1" initialConcentration="1"/>
+      <species id="TU_008" name="TU_008" compartment="C1" initialConcentration="1"/>
+      <species id="TU_009" name="TU_009" compartment="C1" initialConcentration="1"/>
+      <species id="TU_010" name="TU_010" compartment="C1" initialConcentration="1"/>
+      <species id="TU_011" name="TU_011" compartment="C1" initialConcentration="1"/>
+      <species id="TU_012" name="TU_012" compartment="C1" initialConcentration="1"/>
+      <species id="TU_013" name="TU_013" compartment="C1" initialConcentration="1"/>
+      <species id="TU_014" name="TU_014" compartment="C1" initialConcentration="1"/>
+      <species id="TU_015" name="TU_015" compartment="C1" initialConcentration="1"/>
+      <species id="TU_016" name="TU_016" compartment="C1" initialConcentration="1"/>
+      <species id="TU_017" name="TU_017" compartment="C1" initialConcentration="1"/>
+      <species id="TU_018" name="TU_018" compartment="C1" initialConcentration="1"/>
+      <species id="TU_019" name="TU_019" compartment="C1" initialConcentration="1"/>
+      <species id="TU_020" name="TU_020" compartment="C1" initialConcentration="1"/>
+      <species id="TU_021" name="TU_021" compartment="C1" initialConcentration="1"/>
+      <species id="TU_022" name="TU_022" compartment="C1" initialConcentration="1"/>
+      <species id="TU_023" name="TU_023" compartment="C1" initialConcentration="1"/>
+      <species id="TU_024" name="TU_024" compartment="C1" initialConcentration="1"/>
+      <species id="TU_025" name="TU_025" compartment="C1" initialConcentration="1"/>
+      <species id="TU_026" name="TU_026" compartment="C1" initialConcentration="1"/>
+      <species id="TU_027" name="TU_027" compartment="C1" initialConcentration="1"/>
+      <species id="TU_028" name="TU_028" compartment="C1" initialConcentration="1"/>
+      <species id="TU_029" name="TU_029" compartment="C1" initialConcentration="1"/>
+      <species id="TU_030" name="TU_030" compartment="C1" initialConcentration="1"/>
+      <species id="TU_031" name="TU_031" compartment="C1" initialConcentration="1"/>
+      <species id="TU_032" name="TU_032" compartment="C1" initialConcentration="1"/>
+      <species id="TU_033" name="TU_033" compartment="C1" initialConcentration="1"/>
+      <species id="TU_034" name="TU_034" compartment="C1" initialConcentration="1"/>
+      <species id="TU_035" name="TU_035" compartment="C1" initialConcentration="1"/>
+      <species id="TU_036" name="TU_036" compartment="C1" initialConcentration="1"/>
+      <species id="TU_037" name="TU_037" compartment="C1" initialConcentration="1"/>
+      <species id="TU_038" name="TU_038" compartment="C1" initialConcentration="1"/>
+      <species id="TU_039" name="TU_039" compartment="C1" initialConcentration="1"/>
+      <species id="TU_040" name="TU_040" compartment="C1" initialConcentration="1"/>
+      <species id="TU_041" name="TU_041" compartment="C1" initialConcentration="1"/>
+      <species id="TU_042" name="TU_042" compartment="C1" initialConcentration="1"/>
+      <species id="TU_043" name="TU_043" compartment="C1" initialConcentration="1"/>
+      <species id="TU_044" name="TU_044" compartment="C1" initialConcentration="1"/>
+      <species id="TU_045" name="TU_045" compartment="C1" initialConcentration="1"/>
+      <species id="TU_046" name="TU_046" compartment="C1" initialConcentration="1"/>
+      <species id="TU_047" name="TU_047" compartment="C1" initialConcentration="1"/>
+      <species id="TU_048" name="TU_048" compartment="C1" initialConcentration="1"/>
+      <species id="TU_049" name="TU_049" compartment="C1" initialConcentration="1"/>
+      <species id="TU_050" name="TU_050" compartment="C1" initialConcentration="1"/>
+      <species id="TU_051" name="TU_051" compartment="C1" initialConcentration="1"/>
+      <species id="TU_052" name="TU_052" compartment="C1" initialConcentration="1"/>
+      <species id="TU_053" name="TU_053" compartment="C1" initialConcentration="1"/>
+      <species id="TU_054" name="TU_054" compartment="C1" initialConcentration="1"/>
+      <species id="TU_055" name="TU_055" compartment="C1" initialConcentration="1"/>
+      <species id="TU_056" name="TU_056" compartment="C1" initialConcentration="1"/>
+      <species id="TU_057" name="TU_057" compartment="C1" initialConcentration="1"/>
+      <species id="TU_058" name="TU_058" compartment="C1" initialConcentration="1"/>
+      <species id="TU_059" name="TU_059" compartment="C1" initialConcentration="1"/>
+      <species id="TU_060" name="TU_060" compartment="C1" initialConcentration="1"/>
+      <species id="TU_061" name="TU_061" compartment="C1" initialConcentration="1"/>
+      <species id="TU_062" name="TU_062" compartment="C1" initialConcentration="1"/>
+      <species id="TU_063" name="TU_063" compartment="C1" initialConcentration="1"/>
+      <species id="TU_064" name="TU_064" compartment="C1" initialConcentration="1"/>
+      <species id="TU_065" name="TU_065" compartment="C1" initialConcentration="1"/>
+      <species id="TU_066" name="TU_066" compartment="C1" initialConcentration="1"/>
+      <species id="TU_067" name="TU_067" compartment="C1" initialConcentration="1"/>
+      <species id="TU_068" name="TU_068" compartment="C1" initialConcentration="1"/>
+      <species id="TU_069" name="TU_069" compartment="C1" initialConcentration="1"/>
+      <species id="TU_070" name="TU_070" compartment="C1" initialConcentration="1"/>
+      <species id="TU_071" name="TU_071" compartment="C1" initialConcentration="1"/>
+      <species id="TU_072" name="TU_072" compartment="C1" initialConcentration="1"/>
+      <species id="TU_073" name="TU_073" compartment="C1" initialConcentration="1"/>
+      <species id="TU_074" name="TU_074" compartment="C1" initialConcentration="1"/>
+      <species id="TU_075" name="TU_075" compartment="C1" initialConcentration="1"/>
+      <species id="TU_076" name="TU_076" compartment="C1" initialConcentration="1"/>
+      <species id="TU_077" name="TU_077" compartment="C1" initialConcentration="1"/>
+      <species id="TU_078" name="TU_078" compartment="C1" initialConcentration="1"/>
+      <species id="TU_079" name="TU_079" compartment="C1" initialConcentration="1"/>
+      <species id="TU_080" name="TU_080" compartment="C1" initialConcentration="1"/>
+      <species id="TU_081" name="TU_081" compartment="C1" initialConcentration="1"/>
+      <species id="TU_082" name="TU_082" compartment="C1" initialConcentration="1"/>
+      <species id="TU_083" name="TU_083" compartment="C1" initialConcentration="1"/>
+      <species id="TU_084" name="TU_084" compartment="C1" initialConcentration="1"/>
+      <species id="TU_085" name="TU_085" compartment="C1" initialConcentration="1"/>
+      <species id="TU_086" name="TU_086" compartment="C1" initialConcentration="1"/>
+      <species id="TU_087" name="TU_087" compartment="C1" initialConcentration="1"/>
+      <species id="TU_088" name="TU_088" compartment="C1" initialConcentration="1"/>
+      <species id="TU_089" name="TU_089" compartment="C1" initialConcentration="1"/>
+      <species id="TU_090" name="TU_090" compartment="C1" initialConcentration="1"/>
+      <species id="TU_091" name="TU_091" compartment="C1" initialConcentration="1"/>
+      <species id="TU_092" name="TU_092" compartment="C1" initialConcentration="1"/>
+      <species id="TU_093" name="TU_093" compartment="C1" initialConcentration="1"/>
+      <species id="TU_094" name="TU_094" compartment="C1" initialConcentration="1"/>
+      <species id="TU_095" name="TU_095" compartment="C1" initialConcentration="1"/>
+      <species id="TU_096" name="TU_096" compartment="C1" initialConcentration="1"/>
+      <species id="TU_097" name="TU_097" compartment="C1" initialConcentration="1"/>
+      <species id="TU_098" name="TU_098" compartment="C1" initialConcentration="1"/>
+      <species id="TU_099" name="TU_099" compartment="C1" initialConcentration="1"/>
+      <species id="TU_100" name="TU_100" compartment="C1" initialConcentration="1"/>
+      <species id="TU_101" name="TU_101" compartment="C1" initialConcentration="1"/>
+      <species id="TU_102" name="TU_102" compartment="C1" initialConcentration="1"/>
+      <species id="TU_103" name="TU_103" compartment="C1" initialConcentration="1"/>
+      <species id="TU_104" name="TU_104" compartment="C1" initialConcentration="1"/>
+      <species id="TU_105" name="TU_105" compartment="C1" initialConcentration="1"/>
+      <species id="TU_106" name="TU_106" compartment="C1" initialConcentration="1"/>
+      <species id="TU_107" name="TU_107" compartment="C1" initialConcentration="1"/>
+      <species id="TU_108" name="TU_108" compartment="C1" initialConcentration="1"/>
+      <species id="TU_109" name="TU_109" compartment="C1" initialConcentration="1"/>
+      <species id="TU_110" name="TU_110" compartment="C1" initialConcentration="1"/>
+      <species id="TU_111" name="TU_111" compartment="C1" initialConcentration="1"/>
+      <species id="TU_112" name="TU_112" compartment="C1" initialConcentration="1"/>
+      <species id="TU_113" name="TU_113" compartment="C1" initialConcentration="1"/>
+      <species id="TU_114" name="TU_114" compartment="C1" initialConcentration="1"/>
+      <species id="TU_115" name="TU_115" compartment="C1" initialConcentration="1"/>
+      <species id="TU_116" name="TU_116" compartment="C1" initialConcentration="1"/>
+      <species id="TU_117" name="TU_117" compartment="C1" initialConcentration="1"/>
+      <species id="TU_118" name="TU_118" compartment="C1" initialConcentration="1"/>
+      <species id="TU_119" name="TU_119" compartment="C1" initialConcentration="1"/>
+      <species id="TU_120" name="TU_120" compartment="C1" initialConcentration="1"/>
+      <species id="TU_121" name="TU_121" compartment="C1" initialConcentration="1"/>
+      <species id="TU_122" name="TU_122" compartment="C1" initialConcentration="1"/>
+      <species id="TU_123" name="TU_123" compartment="C1" initialConcentration="1"/>
+      <species id="TU_124" name="TU_124" compartment="C1" initialConcentration="1"/>
+      <species id="TU_125" name="TU_125" compartment="C1" initialConcentration="1"/>
+      <species id="TU_126" name="TU_126" compartment="C1" initialConcentration="1"/>
+      <species id="TU_127" name="TU_127" compartment="C1" initialConcentration="1"/>
+      <species id="TU_128" name="TU_128" compartment="C1" initialConcentration="1"/>
+      <species id="TU_129" name="TU_129" compartment="C1" initialConcentration="1"/>
+      <species id="TU_130" name="TU_130" compartment="C1" initialConcentration="1"/>
+      <species id="TU_131" name="TU_131" compartment="C1" initialConcentration="1"/>
+      <species id="TU_132" name="TU_132" compartment="C1" initialConcentration="1"/>
+      <species id="TU_133" name="TU_133" compartment="C1" initialConcentration="1"/>
+      <species id="TU_134" name="TU_134" compartment="C1" initialConcentration="1"/>
+      <species id="TU_135" name="TU_135" compartment="C1" initialConcentration="1"/>
+      <species id="TU_136" name="TU_136" compartment="C1" initialConcentration="1"/>
+      <species id="TU_137" name="TU_137" compartment="C1" initialConcentration="1"/>
+      <species id="TU_138" name="TU_138" compartment="C1" initialConcentration="1"/>
+      <species id="TU_139" name="TU_139" compartment="C1" initialConcentration="1"/>
+      <species id="TU_140" name="TU_140" compartment="C1" initialConcentration="1"/>
+      <species id="TU_141" name="TU_141" compartment="C1" initialConcentration="1"/>
+      <species id="TU_142" name="TU_142" compartment="C1" initialConcentration="1"/>
+      <species id="TU_143" name="TU_143" compartment="C1" initialConcentration="1"/>
+      <species id="TU_144" name="TU_144" compartment="C1" initialConcentration="1"/>
+      <species id="TU_145" name="TU_145" compartment="C1" initialConcentration="1"/>
+      <species id="TU_146" name="TU_146" compartment="C1" initialConcentration="1"/>
+      <species id="TU_147" name="TU_147" compartment="C1" initialConcentration="1"/>
+      <species id="TU_148" name="TU_148" compartment="C1" initialConcentration="1"/>
+      <species id="TU_149" name="TU_149" compartment="C1" initialConcentration="1"/>
+      <species id="TU_150" name="TU_150" compartment="C1" initialConcentration="1"/>
+      <species id="TU_151" name="TU_151" compartment="C1" initialConcentration="1"/>
+      <species id="TU_152" name="TU_152" compartment="C1" initialConcentration="1"/>
+      <species id="TU_153" name="TU_153" compartment="C1" initialConcentration="1"/>
+      <species id="TU_154" name="TU_154" compartment="C1" initialConcentration="1"/>
+      <species id="TU_155" name="TU_155" compartment="C1" initialConcentration="1"/>
+      <species id="TU_156" name="TU_156" compartment="C1" initialConcentration="1"/>
+      <species id="TU_157" name="TU_157" compartment="C1" initialConcentration="1"/>
+      <species id="TU_158" name="TU_158" compartment="C1" initialConcentration="1"/>
+      <species id="TU_159" name="TU_159" compartment="C1" initialConcentration="1"/>
+      <species id="TU_160" name="TU_160" compartment="C1" initialConcentration="1"/>
+      <species id="TU_161" name="TU_161" compartment="C1" initialConcentration="1"/>
+      <species id="TU_162" name="TU_162" compartment="C1" initialConcentration="1"/>
+      <species id="TU_163" name="TU_163" compartment="C1" initialConcentration="1"/>
+      <species id="TU_164" name="TU_164" compartment="C1" initialConcentration="1"/>
+      <species id="TU_165" name="TU_165" compartment="C1" initialConcentration="1"/>
+      <species id="TU_166" name="TU_166" compartment="C1" initialConcentration="1"/>
+      <species id="TU_167" name="TU_167" compartment="C1" initialConcentration="1"/>
+      <species id="TU_168" name="TU_168" compartment="C1" initialConcentration="1"/>
+      <species id="TU_169" name="TU_169" compartment="C1" initialConcentration="1"/>
+      <species id="TU_170" name="TU_170" compartment="C1" initialConcentration="1"/>
+      <species id="TU_171" name="TU_171" compartment="C1" initialConcentration="1"/>
+      <species id="TU_172" name="TU_172" compartment="C1" initialConcentration="1"/>
+      <species id="TU_173" name="TU_173" compartment="C1" initialConcentration="1"/>
+      <species id="TU_174" name="TU_174" compartment="C1" initialConcentration="1"/>
+      <species id="TU_175" name="TU_175" compartment="C1" initialConcentration="1"/>
+      <species id="TU_176" name="TU_176" compartment="C1" initialConcentration="1"/>
+      <species id="TU_177" name="TU_177" compartment="C1" initialConcentration="1"/>
+      <species id="TU_178" name="TU_178" compartment="C1" initialConcentration="1"/>
+      <species id="TU_179" name="TU_179" compartment="C1" initialConcentration="1"/>
+      <species id="TU_180" name="TU_180" compartment="C1" initialConcentration="1"/>
+      <species id="TU_181" name="TU_181" compartment="C1" initialConcentration="1"/>
+      <species id="TU_182" name="TU_182" compartment="C1" initialConcentration="1"/>
+      <species id="TU_183" name="TU_183" compartment="C1" initialConcentration="1"/>
+      <species id="TU_184" name="TU_184" compartment="C1" initialConcentration="1"/>
+      <species id="TU_185" name="TU_185" compartment="C1" initialConcentration="1"/>
+      <species id="TU_186" name="TU_186" compartment="C1" initialConcentration="1"/>
+      <species id="TU_187" name="TU_187" compartment="C1" initialConcentration="1"/>
+      <species id="TU_188" name="TU_188" compartment="C1" initialConcentration="1"/>
+      <species id="TU_189" name="TU_189" compartment="C1" initialConcentration="1"/>
+      <species id="TU_190" name="TU_190" compartment="C1" initialConcentration="1"/>
+      <species id="TU_191" name="TU_191" compartment="C1" initialConcentration="1"/>
+      <species id="TU_192" name="TU_192" compartment="C1" initialConcentration="1"/>
+      <species id="TU_193" name="TU_193" compartment="C1" initialConcentration="1"/>
+      <species id="TU_194" name="TU_194" compartment="C1" initialConcentration="1"/>
+      <species id="TU_195" name="TU_195" compartment="C1" initialConcentration="1"/>
+      <species id="TU_196" name="TU_196" compartment="C1" initialConcentration="1"/>
+      <species id="TU_197" name="TU_197" compartment="C1" initialConcentration="1"/>
+      <species id="TU_198" name="TU_198" compartment="C1" initialConcentration="1"/>
+      <species id="TU_199" name="TU_199" compartment="C1" initialConcentration="1"/>
+      <species id="TU_200" name="TU_200" compartment="C1" initialConcentration="1"/>
+      <species id="TU_201" name="TU_201" compartment="C1" initialConcentration="1"/>
+      <species id="TU_202" name="TU_202" compartment="C1" initialConcentration="1"/>
+      <species id="TU_203" name="TU_203" compartment="C1" initialConcentration="1"/>
+      <species id="TU_204" name="TU_204" compartment="C1" initialConcentration="1"/>
+      <species id="TU_205" name="TU_205" compartment="C1" initialConcentration="1"/>
+      <species id="TU_206" name="TU_206" compartment="C1" initialConcentration="1"/>
+      <species id="TU_207" name="TU_207" compartment="C1" initialConcentration="1"/>
+      <species id="TU_208" name="TU_208" compartment="C1" initialConcentration="1"/>
+      <species id="TU_209" name="TU_209" compartment="C1" initialConcentration="1"/>
+      <species id="TU_210" name="TU_210" compartment="C1" initialConcentration="1"/>
+      <species id="TU_211" name="TU_211" compartment="C1" initialConcentration="1"/>
+      <species id="TU_212" name="TU_212" compartment="C1" initialConcentration="1"/>
+      <species id="TU_213" name="TU_213" compartment="C1" initialConcentration="1"/>
+      <species id="TU_214" name="TU_214" compartment="C1" initialConcentration="1"/>
+      <species id="TU_215" name="TU_215" compartment="C1" initialConcentration="1"/>
+      <species id="TU_216" name="TU_216" compartment="C1" initialConcentration="1"/>
+      <species id="TU_217" name="TU_217" compartment="C1" initialConcentration="1"/>
+      <species id="TU_218" name="TU_218" compartment="C1" initialConcentration="1"/>
+      <species id="TU_219" name="TU_219" compartment="C1" initialConcentration="1"/>
+      <species id="TU_220" name="TU_220" compartment="C1" initialConcentration="1"/>
+      <species id="TU_221" name="TU_221" compartment="C1" initialConcentration="1"/>
+      <species id="TU_222" name="TU_222" compartment="C1" initialConcentration="1"/>
+      <species id="TU_223" name="TU_223" compartment="C1" initialConcentration="1"/>
+      <species id="TU_224" name="TU_224" compartment="C1" initialConcentration="1"/>
+      <species id="TU_225" name="TU_225" compartment="C1" initialConcentration="1"/>
+      <species id="TU_226" name="TU_226" compartment="C1" initialConcentration="1"/>
+      <species id="TU_227" name="TU_227" compartment="C1" initialConcentration="1"/>
+      <species id="TU_228" name="TU_228" compartment="C1" initialConcentration="1"/>
+      <species id="TU_229" name="TU_229" compartment="C1" initialConcentration="1"/>
+      <species id="TU_230" name="TU_230" compartment="C1" initialConcentration="1"/>
+      <species id="TU_231" name="TU_231" compartment="C1" initialConcentration="1"/>
+      <species id="TU_232" name="TU_232" compartment="C1" initialConcentration="1"/>
+      <species id="TU_233" name="TU_233" compartment="C1" initialConcentration="1"/>
+      <species id="TU_234" name="TU_234" compartment="C1" initialConcentration="1"/>
+      <species id="TU_235" name="TU_235" compartment="C1" initialConcentration="1"/>
+      <species id="TU_236" name="TU_236" compartment="C1" initialConcentration="1"/>
+      <species id="TU_237" name="TU_237" compartment="C1" initialConcentration="1"/>
+      <species id="TU_238" name="TU_238" compartment="C1" initialConcentration="1"/>
+      <species id="TU_239" name="TU_239" compartment="C1" initialConcentration="1"/>
+      <species id="TU_240" name="TU_240" compartment="C1" initialConcentration="1"/>
+      <species id="TU_241" name="TU_241" compartment="C1" initialConcentration="1"/>
+      <species id="TU_242" name="TU_242" compartment="C1" initialConcentration="1"/>
+      <species id="TU_243" name="TU_243" compartment="C1" initialConcentration="1"/>
+      <species id="TU_244" name="TU_244" compartment="C1" initialConcentration="1"/>
+      <species id="TU_245" name="TU_245" compartment="C1" initialConcentration="1"/>
+      <species id="TU_246" name="TU_246" compartment="C1" initialConcentration="1"/>
+      <species id="TU_247" name="TU_247" compartment="C1" initialConcentration="1"/>
+      <species id="TU_248" name="TU_248" compartment="C1" initialConcentration="1"/>
+      <species id="TU_249" name="TU_249" compartment="C1" initialConcentration="1"/>
+      <species id="TU_250" name="TU_250" compartment="C1" initialConcentration="1"/>
+      <species id="TU_251" name="TU_251" compartment="C1" initialConcentration="1"/>
+      <species id="TU_252" name="TU_252" compartment="C1" initialConcentration="1"/>
+      <species id="TU_253" name="TU_253" compartment="C1" initialConcentration="1"/>
+      <species id="TU_254" name="TU_254" compartment="C1" initialConcentration="1"/>
+      <species id="TU_255" name="TU_255" compartment="C1" initialConcentration="1"/>
+      <species id="TU_256" name="TU_256" compartment="C1" initialConcentration="1"/>
+      <species id="TU_257" name="TU_257" compartment="C1" initialConcentration="1"/>
+      <species id="TU_258" name="TU_258" compartment="C1" initialConcentration="1"/>
+      <species id="TU_259" name="TU_259" compartment="C1" initialConcentration="1"/>
+      <species id="TU_260" name="TU_260" compartment="C1" initialConcentration="1"/>
+      <species id="TU_261" name="TU_261" compartment="C1" initialConcentration="1"/>
+      <species id="TU_262" name="TU_262" compartment="C1" initialConcentration="1"/>
+      <species id="TU_263" name="TU_263" compartment="C1" initialConcentration="1"/>
+      <species id="TU_264" name="TU_264" compartment="C1" initialConcentration="1"/>
+      <species id="TU_265" name="TU_265" compartment="C1" initialConcentration="1"/>
+      <species id="TU_266" name="TU_266" compartment="C1" initialConcentration="1"/>
+      <species id="TU_267" name="TU_267" compartment="C1" initialConcentration="1"/>
+      <species id="TU_268" name="TU_268" compartment="C1" initialConcentration="1"/>
+      <species id="TU_269" name="TU_269" compartment="C1" initialConcentration="1"/>
+      <species id="TU_270" name="TU_270" compartment="C1" initialConcentration="1"/>
+      <species id="TU_271" name="TU_271" compartment="C1" initialConcentration="1"/>
+      <species id="TU_272" name="TU_272" compartment="C1" initialConcentration="1"/>
+      <species id="TU_273" name="TU_273" compartment="C1" initialConcentration="1"/>
+      <species id="TU_274" name="TU_274" compartment="C1" initialConcentration="1"/>
+      <species id="TU_275" name="TU_275" compartment="C1" initialConcentration="1"/>
+      <species id="TU_276" name="TU_276" compartment="C1" initialConcentration="1"/>
+      <species id="TU_277" name="TU_277" compartment="C1" initialConcentration="1"/>
+      <species id="TU_278" name="TU_278" compartment="C1" initialConcentration="1"/>
+      <species id="TU_279" name="TU_279" compartment="C1" initialConcentration="1"/>
+      <species id="TU_280" name="TU_280" compartment="C1" initialConcentration="1"/>
+      <species id="TU_281" name="TU_281" compartment="C1" initialConcentration="1"/>
+      <species id="TU_282" name="TU_282" compartment="C1" initialConcentration="1"/>
+      <species id="TU_283" name="TU_283" compartment="C1" initialConcentration="1"/>
+      <species id="TU_284" name="TU_284" compartment="C1" initialConcentration="1"/>
+      <species id="TU_285" name="TU_285" compartment="C1" initialConcentration="1"/>
+      <species id="TU_286" name="TU_286" compartment="C1" initialConcentration="1"/>
+      <species id="TU_287" name="TU_287" compartment="C1" initialConcentration="1"/>
+      <species id="TU_288" name="TU_288" compartment="C1" initialConcentration="1"/>
+      <species id="TU_289" name="TU_289" compartment="C1" initialConcentration="1"/>
+      <species id="TU_290" name="TU_290" compartment="C1" initialConcentration="1"/>
+      <species id="TU_291" name="TU_291" compartment="C1" initialConcentration="1"/>
+      <species id="TU_292" name="TU_292" compartment="C1" initialConcentration="1"/>
+      <species id="TU_293" name="TU_293" compartment="C1" initialConcentration="1"/>
+      <species id="TU_294" name="TU_294" compartment="C1" initialConcentration="1"/>
+      <species id="TU_295" name="TU_295" compartment="C1" initialConcentration="1"/>
+      <species id="TU_296" name="TU_296" compartment="C1" initialConcentration="1"/>
+      <species id="TU_297" name="TU_297" compartment="C1" initialConcentration="1"/>
+      <species id="TU_298" name="TU_298" compartment="C1" initialConcentration="1"/>
+      <species id="TU_299" name="TU_299" compartment="C1" initialConcentration="1"/>
+      <species id="TU_300" name="TU_300" compartment="C1" initialConcentration="1"/>
+      <species id="TU_301" name="TU_301" compartment="C1" initialConcentration="1"/>
+      <species id="TU_302" name="TU_302" compartment="C1" initialConcentration="1"/>
+      <species id="TU_303" name="TU_303" compartment="C1" initialConcentration="1"/>
+      <species id="TU_304" name="TU_304" compartment="C1" initialConcentration="1"/>
+      <species id="TU_305" name="TU_305" compartment="C1" initialConcentration="1"/>
+      <species id="TU_306" name="TU_306" compartment="C1" initialConcentration="1"/>
+      <species id="TU_307" name="TU_307" compartment="C1" initialConcentration="1"/>
+      <species id="TU_308" name="TU_308" compartment="C1" initialConcentration="1"/>
+      <species id="TU_309" name="TU_309" compartment="C1" initialConcentration="1"/>
+      <species id="TU_310" name="TU_310" compartment="C1" initialConcentration="1"/>
+      <species id="TU_311" name="TU_311" compartment="C1" initialConcentration="1"/>
+      <species id="TU_312" name="TU_312" compartment="C1" initialConcentration="1"/>
+      <species id="TU_313" name="TU_313" compartment="C1" initialConcentration="1"/>
+      <species id="TU_314" name="TU_314" compartment="C1" initialConcentration="1"/>
+      <species id="TU_315" name="TU_315" compartment="C1" initialConcentration="1"/>
+      <species id="TU_316" name="TU_316" compartment="C1" initialConcentration="1"/>
+      <species id="TU_317" name="TU_317" compartment="C1" initialConcentration="1"/>
+      <species id="TU_318" name="TU_318" compartment="C1" initialConcentration="1"/>
+      <species id="TU_319" name="TU_319" compartment="C1" initialConcentration="1"/>
+      <species id="TU_320" name="TU_320" compartment="C1" initialConcentration="1"/>
+      <species id="TU_321" name="TU_321" compartment="C1" initialConcentration="1"/>
+      <species id="TU_322" name="TU_322" compartment="C1" initialConcentration="1"/>
+      <species id="TU_323" name="TU_323" compartment="C1" initialConcentration="1"/>
+      <species id="TU_324" name="TU_324" compartment="C1" initialConcentration="1"/>
+      <species id="TU_325" name="TU_325" compartment="C1" initialConcentration="1"/>
+      <species id="TU_326" name="TU_326" compartment="C1" initialConcentration="1"/>
+      <species id="TU_327" name="TU_327" compartment="C1" initialConcentration="1"/>
+      <species id="TU_328" name="TU_328" compartment="C1" initialConcentration="1"/>
+      <species id="TU_329" name="TU_329" compartment="C1" initialConcentration="1"/>
+      <species id="TU_330" name="TU_330" compartment="C1" initialConcentration="1"/>
+      <species id="TU_331" name="TU_331" compartment="C1" initialConcentration="1"/>
+      <species id="TU_332" name="TU_332" compartment="C1" initialConcentration="1"/>
+      <species id="TU_333" name="TU_333" compartment="C1" initialConcentration="1"/>
+      <species id="TU_334" name="TU_334" compartment="C1" initialConcentration="1"/>
+      <species id="TU_335" name="TU_335" compartment="C1" initialConcentration="1"/>
+      <species id="fur" name="fur" compartment="C1" initialConcentration="10"/>
+      <species id="gntR" name="gntR" compartment="C1" initialConcentration="10"/>
+      <species id="hrcA" name="hrcA" compartment="C1" initialConcentration="10"/>
+      <species id="luxR" name="luxR" compartment="C1" initialConcentration="10"/>
+      <species id="spx" name="spx" compartment="C1" initialConcentration="10"/>
+      <species id="TU_008_fur" name="TU_008_fur" compartment="C1" initialConcentration="1"/>
+      <species id="TU_016_fur" name="TU_016_fur" compartment="C1" initialConcentration="1"/>
+      <species id="TU_085_fur" name="TU_085_fur" compartment="C1" initialConcentration="1"/>
+      <species id="TU_097_fur" name="TU_097_fur" compartment="C1" initialConcentration="1"/>
+      <species id="TU_196_fur" name="TU_196_fur" compartment="C1" initialConcentration="1"/>
+      <species id="TU_207_fur" name="TU_207_fur" compartment="C1" initialConcentration="1"/>
+      <species id="TU_222_fur" name="TU_222_fur" compartment="C1" initialConcentration="1"/>
+      <species id="TU_249_fur" name="TU_249_fur" compartment="C1" initialConcentration="1"/>
+      <species id="TU_063_gntR" name="TU_063_gntR" compartment="C1" initialConcentration="1"/>
+      <species id="TU_010_hrcA" name="TU_010_hrcA" compartment="C1" initialConcentration="1"/>
+      <species id="TU_122_hrcA" name="TU_122_hrcA" compartment="C1" initialConcentration="1"/>
+      <species id="TU_155_hrcA" name="TU_155_hrcA" compartment="C1" initialConcentration="1"/>
+      <species id="TU_208_hrcA" name="TU_208_hrcA" compartment="C1" initialConcentration="1"/>
+      <species id="TU_258_hrcA" name="TU_258_hrcA" compartment="C1" initialConcentration="1"/>
+      <species id="TU_285_hrcA" name="TU_285_hrcA" compartment="C1" initialConcentration="1"/>
+      <species id="TU_063_luxR" name="TU_063_luxR" compartment="C1" initialConcentration="1"/>
+      <species id="TU_318_luxR" name="TU_318_luxR" compartment="C1" initialConcentration="1"/>
+      <species id="TU_008_spx" name="TU_008_spx" compartment="C1" initialConcentration="1"/>
+      <species id="TU_014_spx" name="TU_014_spx" compartment="C1" initialConcentration="1"/>
+      <species id="TU_030_spx" name="TU_030_spx" compartment="C1" initialConcentration="1"/>
+      <species id="TU_051_spx" name="TU_051_spx" compartment="C1" initialConcentration="1"/>
+      <species id="TU_063_spx" name="TU_063_spx" compartment="C1" initialConcentration="1"/>
+      <species id="TU_074_spx" name="TU_074_spx" compartment="C1" initialConcentration="1"/>
+      <species id="TU_076_spx" name="TU_076_spx" compartment="C1" initialConcentration="1"/>
+      <species id="TU_113_spx" name="TU_113_spx" compartment="C1" initialConcentration="1"/>
+      <species id="TU_180_spx" name="TU_180_spx" compartment="C1" initialConcentration="1"/>
+      <species id="TU_190_spx" name="TU_190_spx" compartment="C1" initialConcentration="1"/>
+      <species id="TU_198_spx" name="TU_198_spx" compartment="C1" initialConcentration="1"/>
+      <species id="TU_207_spx" name="TU_207_spx" compartment="C1" initialConcentration="1"/>
+      <species id="TU_326_spx" name="TU_326_spx" compartment="C1" initialConcentration="1"/>
+    </listOfSpecies>
+    <listOfParameters>
+      <parameter id="k_fur_binds_TU_008" value="0.02"/>
+      <parameter id="k_fur_binds_TU_016" value="0.02"/>
+      <parameter id="k_fur_binds_TU_085" value="0.02"/>
+      <parameter id="k_fur_binds_TU_097" value="0.02"/>
+      <parameter id="k_fur_binds_TU_196" value="0.02"/>
+      <parameter id="k_fur_binds_TU_207" value="0.02"/>
+      <parameter id="k_fur_binds_TU_222" value="0.02"/>
+      <parameter id="k_fur_binds_TU_249" value="0.02"/>
+      <parameter id="k_gntR_binds_TU_063" value="0.02"/>
+      <parameter id="k_hrcA_binds_TU_010" value="0.02"/>
+      <parameter id="k_hrcA_binds_TU_122" value="0.02"/>
+      <parameter id="k_hrcA_binds_TU_155" value="0.02"/>
+      <parameter id="k_hrcA_binds_TU_208" value="0.02"/>
+      <parameter id="k_hrcA_binds_TU_258" value="0.02"/>
+      <parameter id="k_hrcA_binds_TU_285" value="0.02"/>
+      <parameter id="k_luxR_binds_TU_063" value="0.02"/>
+      <parameter id="k_luxR_binds_TU_318" value="0.02"/>
+      <parameter id="k_spx_binds_TU_008" value="0.02"/>
+      <parameter id="k_spx_binds_TU_014" value="0.02"/>
+      <parameter id="k_spx_binds_TU_030" value="0.02"/>
+      <parameter id="k_spx_binds_TU_051" value="0.02"/>
+      <parameter id="k_spx_binds_TU_063" value="0.02"/>
+      <parameter id="k_spx_binds_TU_074" value="0.02"/>
+      <parameter id="k_spx_binds_TU_076" value="0.02"/>
+      <parameter id="k_spx_binds_TU_113" value="0.02"/>
+      <parameter id="k_spx_binds_TU_180" value="0.02"/>
+      <parameter id="k_spx_binds_TU_190" value="0.02"/>
+      <parameter id="k_spx_binds_TU_198" value="0.02"/>
+      <parameter id="k_spx_binds_TU_207" value="0.02"/>
+      <parameter id="k_spx_binds_TU_326" value="0.02"/>
+    </listOfParameters>
+    <listOfReactions>
+      <reaction id="R1" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_008" stoichiometry="1"/>
+          <speciesReference species="fur" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_008_fur" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_fur_binds_TU_008 </ci>
+              <ci> TU_008 </ci>
+              <ci> fur </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R2" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_016" stoichiometry="1"/>
+          <speciesReference species="fur" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_016_fur" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_fur_binds_TU_016 </ci>
+              <ci> TU_016 </ci>
+              <ci> fur </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R3" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_085" stoichiometry="1"/>
+          <speciesReference species="fur" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_085_fur" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_fur_binds_TU_085 </ci>
+              <ci> TU_085 </ci>
+              <ci> fur </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R4" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_097" stoichiometry="1"/>
+          <speciesReference species="fur" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_097_fur" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_fur_binds_TU_097 </ci>
+              <ci> TU_097 </ci>
+              <ci> fur </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R5" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_196" stoichiometry="1"/>
+          <speciesReference species="fur" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_196_fur" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_fur_binds_TU_196 </ci>
+              <ci> TU_196 </ci>
+              <ci> fur </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R6" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_207" stoichiometry="1"/>
+          <speciesReference species="fur" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_207_fur" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_fur_binds_TU_207 </ci>
+              <ci> TU_207 </ci>
+              <ci> fur </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R7" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_222" stoichiometry="1"/>
+          <speciesReference species="fur" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_222_fur" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_fur_binds_TU_222 </ci>
+              <ci> TU_222 </ci>
+              <ci> fur </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R8" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_249" stoichiometry="1"/>
+          <speciesReference species="fur" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_249_fur" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_fur_binds_TU_249 </ci>
+              <ci> TU_249 </ci>
+              <ci> fur </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R9" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_063" stoichiometry="1"/>
+          <speciesReference species="gntR" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_063_gntR" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_gntR_binds_TU_063 </ci>
+              <ci> TU_063 </ci>
+              <ci> gntR </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R10" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_010" stoichiometry="1"/>
+          <speciesReference species="hrcA" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_010_hrcA" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_hrcA_binds_TU_010 </ci>
+              <ci> TU_010 </ci>
+              <ci> hrcA </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R11" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_122" stoichiometry="1"/>
+          <speciesReference species="hrcA" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_122_hrcA" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_hrcA_binds_TU_122 </ci>
+              <ci> TU_122 </ci>
+              <ci> hrcA </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R12" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_155" stoichiometry="1"/>
+          <speciesReference species="hrcA" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_155_hrcA" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_hrcA_binds_TU_155 </ci>
+              <ci> TU_155 </ci>
+              <ci> hrcA </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R13" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_208" stoichiometry="1"/>
+          <speciesReference species="hrcA" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_208_hrcA" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_hrcA_binds_TU_208 </ci>
+              <ci> TU_208 </ci>
+              <ci> hrcA </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R14" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_258" stoichiometry="1"/>
+          <speciesReference species="hrcA" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_258_hrcA" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_hrcA_binds_TU_258 </ci>
+              <ci> TU_258 </ci>
+              <ci> hrcA </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R15" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_285" stoichiometry="1"/>
+          <speciesReference species="hrcA" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_285_hrcA" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_hrcA_binds_TU_285 </ci>
+              <ci> TU_285 </ci>
+              <ci> hrcA </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R16" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_063" stoichiometry="1"/>
+          <speciesReference species="luxR" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_063_luxR" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_luxR_binds_TU_063 </ci>
+              <ci> TU_063 </ci>
+              <ci> luxR </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R17" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_318" stoichiometry="1"/>
+          <speciesReference species="luxR" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_318_luxR" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_luxR_binds_TU_318 </ci>
+              <ci> TU_318 </ci>
+              <ci> luxR </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R18" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_008" stoichiometry="1"/>
+          <speciesReference species="spx" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_008_spx" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_spx_binds_TU_008 </ci>
+              <ci> TU_008 </ci>
+              <ci> spx </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R19" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_014" stoichiometry="1"/>
+          <speciesReference species="spx" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_014_spx" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_spx_binds_TU_014 </ci>
+              <ci> TU_014 </ci>
+              <ci> spx </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R20" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_030" stoichiometry="1"/>
+          <speciesReference species="spx" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_030_spx" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_spx_binds_TU_030 </ci>
+              <ci> TU_030 </ci>
+              <ci> spx </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R21" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_051" stoichiometry="1"/>
+          <speciesReference species="spx" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_051_spx" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_spx_binds_TU_051 </ci>
+              <ci> TU_051 </ci>
+              <ci> spx </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R22" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_063" stoichiometry="1"/>
+          <speciesReference species="spx" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_063_spx" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_spx_binds_TU_063 </ci>
+              <ci> TU_063 </ci>
+              <ci> spx </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R23" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_074" stoichiometry="1"/>
+          <speciesReference species="spx" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_074_spx" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_spx_binds_TU_074 </ci>
+              <ci> TU_074 </ci>
+              <ci> spx </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R24" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_076" stoichiometry="1"/>
+          <speciesReference species="spx" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_076_spx" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_spx_binds_TU_076 </ci>
+              <ci> TU_076 </ci>
+              <ci> spx </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R25" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_113" stoichiometry="1"/>
+          <speciesReference species="spx" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_113_spx" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_spx_binds_TU_113 </ci>
+              <ci> TU_113 </ci>
+              <ci> spx </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R26" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_180" stoichiometry="1"/>
+          <speciesReference species="spx" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_180_spx" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_spx_binds_TU_180 </ci>
+              <ci> TU_180 </ci>
+              <ci> spx </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R27" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_190" stoichiometry="1"/>
+          <speciesReference species="spx" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_190_spx" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_spx_binds_TU_190 </ci>
+              <ci> TU_190 </ci>
+              <ci> spx </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R28" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_198" stoichiometry="1"/>
+          <speciesReference species="spx" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_198_spx" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_spx_binds_TU_198 </ci>
+              <ci> TU_198 </ci>
+              <ci> spx </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R29" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_207" stoichiometry="1"/>
+          <speciesReference species="spx" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_207_spx" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_spx_binds_TU_207 </ci>
+              <ci> TU_207 </ci>
+              <ci> spx </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="R30" reversible="false">
+        <listOfReactants>
+          <speciesReference species="TU_326" stoichiometry="1"/>
+          <speciesReference species="spx" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TU_326_spx" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_spx_binds_TU_326 </ci>
+              <ci> TU_326 </ci>
+              <ci> spx </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>
