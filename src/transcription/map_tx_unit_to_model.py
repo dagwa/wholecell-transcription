@@ -8,11 +8,16 @@ parser = argparse.ArgumentParser(description='Map genes to model.')
                     #help='Input files')
 parser.add_argument('--tx-units', dest='tx_units', nargs=1, help='Transcription units CSV')
 parser.add_argument('--genes', dest='genes', nargs=1, help='Genes units CSV')
+parser.add_argument('--locus', dest='locus', action='store_const',
+                   const=True, default=False,
+                   help='Generate per-locus')
 
 args = parser.parse_args()
 
+tu_len_cutoff = 3
+
 # Generate states per base pair?
-perLocus = False
+perLocus = args.locus
 
 class MakeStateName(object):
   def __call__(self, desc, tx_unit, direction, active):
@@ -54,10 +59,13 @@ class RNApState(object):
     self.desc = desc
 
   def __repr__(self):
-    return self.desc
+    return self.id()
 
   def __str__(self):
     return self.__repr__()
+
+  def id(self):
+    return self.desc
 
 class RNApBoundState(RNApState):
   pass
@@ -69,19 +77,25 @@ class RNApSpecBoundState(RNApBoundState):
     self.active = active
     self.desc = desc
 
-  def __repr__(self):
+  def id(self):
     return MakeStateName()(self.desc, self.tx_unit, self.direction, self.active)
 
   def __str__(self):
     return self.__repr__()
+
+  def global_locus(self):
+    return self.tx_unit
 
 class RNApSpecBoundStatePerLocus(RNApSpecBoundState):
   def __init__(self, tx_unit, locus, direction, active, desc):
     super(RNApSpecBoundStatePerLocus, self).__init__(tx_unit, direction, active, desc)
     self.locus = locus
 
-  def __repr__(self):
+  def id(self):
     return MakeStateNamePerLocus()(self.desc, self.tx_unit, self.locus, self.direction, self.active)
+
+  def global_locus(self):
+    return '_'.join(self.tx_unit, str(self.locus))
 
 
 def direc_range():
@@ -101,20 +115,75 @@ with open(args.genes[0]) as gene_f:
 
   # Read rows
   for row in gene_reader:
+    # Get name and sequence of gene
     name = row[name_col]
     seq = row[seq_col]
-    print(seq)
 
     gene_seq[name] = seq
 
 # States for RNAp
-active_RNAp = []
-spec_bound_RNAp = []
-ns_bound_RNAp = RNApBoundState('RNAp_NonSpecBound')
-free_RNAp = RNApState('RNAp_Free')
 
-def RNAp_states():
-  return active_RNAp + spec_bound_RNAp + [ns_bound_RNAp] + [free_RNAp]
+class RNAp_states:
+  def __init__(self):
+    self.active_RNAp = []
+    self.active_sigma_bound_RNAp = []
+    self.spec_bound_RNAp = []
+    self.ns_bound_RNAp = RNApBoundState('RNAp_NonSpecBound')
+    self.free_RNAp = RNApState('RNAp_Free')
+
+  def index(self):
+    self.active_state_for_unit = {}
+    self.active_state_sigma_bound_for_unit = {}
+    self.spec_bound_for_unit = {}
+
+    for state in self.active_RNAp:
+      self.active_state_for_unit[state.global_locus()] = state
+    for state in self.active_sigma_bound_RNAp:
+      self.active_state_sigma_bound_for_unit[state.global_locus()] = state
+    for state in self.spec_bound_RNAp:
+      self.spec_bound_for_unit[state.tx_unit] = state
+
+  def map_spec_bound_to_active_state(self, state):
+    return self.active_state_for_unit[state.global_locus()]
+
+  def add_active_RNAp_state(self, state):
+    self.active_RNAp.append(state)
+
+  def add_active_sigma_bound_RNAp_state(self, state):
+    self.active_sigma_bound_RNAp.append(state)
+
+  def add_spec_bound_RNAp_state(self, state):
+    self.spec_bound_RNAp.append(state)
+
+  # Allow iterating over states
+  def __iter__(self):
+    return iter(self.active_RNAp + self.spec_bound_RNAp + self.active_sigma_bound_RNAp + [self.ns_bound_RNAp] + [self.free_RNAp])
+
+# Make specifically bound and active states for RNAp on each operon
+def make_states(states, tx_unit, locus, direction, active):
+  #states: RNAp_states
+
+  if locus is not None:
+    # Locus granularity
+    active_state = RNApSpecBoundStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = act, desc = 'active')
+    active_state_sigma_bound = RNApSpecBoundStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = act, desc = 'active_sigma_bound')
+    spec_bound_state = RNApSpecBoundStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = act, desc = 'spec_bound')
+  else:
+    # Operon granularity
+    active_state = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = act, desc = 'active')
+    active_state_sigma_bound = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = act, desc = 'active_sigma_bound')
+    spec_bound_state = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = act, desc = 'spec_bound')
+
+  # Append to lists of all states
+  states.add_active_RNAp_state(active_state)
+  states.add_active_sigma_bound_RNAp_state(active_state_sigma_bound)
+  states.add_spec_bound_RNAp_state(spec_bound_state)
+
+
+#def RNAp_states():
+  #return active_RNAp + spec_bound_RNAp + active_sigma_bound_RNAp + [ns_bound_RNAp] + [free_RNAp]
+
+states = RNAp_states()
 
 #for i in args.input:
 with open(args.tx_units[0]) as tx_f:
@@ -133,31 +202,24 @@ with open(args.tx_units[0]) as tx_f:
   for row in tu_reader:
     try:
       tu_name = row[namecol].replace(' ', '_').replace('-', 'X').replace(',', '_')
+      # Genes transcribed
       tu_genes = [x.strip() for x in row[genescol].split(',')]
+      # Length of transcription unit
       tu_length = int(row[lengthcol])
 
+      # Join genes to form transcription unit sequence
       tu_seq = ''.join([x for x in [gene_seq[g] for g in tu_genes]])
       tu_seq = tu_seq.replace('T', 'U') # DNA seq -> RNA seq
-      print(tu_seq)
+      #print(tu_seq)
 
-      def make_states(tx_unit, locus, direction, active):
-        if locus is not None:
-          active_state = RNApSpecBoundStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = act, desc = 'active')
-          spec_bound_state = RNApSpecBoundStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = act, desc = 'spec_bound')
-        else:
-          active_state = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = act, desc = 'active')
-          spec_bound_state = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = act, desc = 'spec_bound')
-
-        active_RNAp.append(active_state)
-        spec_bound_RNAp.append(spec_bound_state)
-
+      # Combinatorics for each param
       for direc in direc_range():
         for act in [True, False]:
           if perLocus:
-            for k in range(tu_length):
-              make_states(tu_name, k, direc, act)
+            for k in range(min(tu_length, tu_len_cutoff)):
+              make_states(states, tu_name, k, direc, act)
           else:
-            make_states(tu_name, None, direc, act)
+            make_states(states, tu_name, None, direc, act)
     except ValueError:
       # Discard header row etc.
       pass
@@ -187,6 +249,8 @@ def check(value, message):
   else:
     return
 
+states.index()
+
 # http://sbml.org/Software/libSBML/docs/python-api/libsbml-python-creating-model.html
 
 document = libsbml.SBMLDocument(3, 1)
@@ -214,18 +278,50 @@ check(c1.setSize(1), 'set compartment "size"')
 check(c1.setSpatialDimensions(3), 'set compartment dimensions')
 check(c1.setUnits('litre'), 'set compartment size units')
 
-for RNAp_state in RNAp_states():
+# Create states
+for RNAp_state in states:
   spec = model.createSpecies()
   check(spec, 'create species spec')
-  idstr = repr(RNAp_state)
+  idstr = RNAp_state.id()
   #print(idstr)
   check(spec.setId(idstr), 'set species spec id')
   check(spec.setCompartment('c1'), 'set species spec compartment')
   check(spec.setConstant(False), 'set "constant" attribute on spec')
   check(spec.setInitialAmount(0), 'set initial amount for spec')
-  check(spec.setSubstanceUnits('mole'), 'set substance units for spec')
+  check(spec.setSubstanceUnits('item'), 'set substance units for spec')
   check(spec.setBoundaryCondition(False), 'set "boundaryCondition" on spec')
   check(spec.setHasOnlySubstanceUnits(False), 'set "hasOnlySubstanceUnits" on spec')
+
+# Create reactions
+
+# Create states spec_bound -> active
+counter = 0
+for state in states.spec_bound_RNAp:
+  active_state = states.map_spec_bound_to_active_state(state)
+
+  r = model.createReaction()
+  check(r, 'create reaction')
+  check(r.setId('r_spec_to_active_{}'.format(counter)), 'set reaction id')
+  check(r.setReversible(False), 'set reaction reversibility flag')
+  check(r.setFast(False), 'set reaction "fast" attribute')
+  counter += 1
+
+  reactant = r.createReactant()
+  check(reactant, 'create reactant')
+  check(reactant.setSpecies(state.id()), 'assign reactant species')
+  check(reactant.setConstant(False), 'set "constant" on species ref 1')
+
+  product = r.createProduct()
+  check(product, 'create product')
+  check(product.setSpecies(active_state.id()), 'assign product species')
+  check(product.setConstant(False), 'set "constant" on species ref 2')
+
+  math_ast = libsbml.parseL3Formula('1')
+  check(math_ast, 'create AST for rate expression')
+
+  kinetic_law = r.createKineticLaw()
+  check(kinetic_law, 'create kinetic law')
+  check(kinetic_law.setMath(math_ast), 'set math on kinetic law')
 
 sbmlstr = libsbml.writeSBMLToString(document)
 with open('/tmp/tx.sbml', 'w') as f:
