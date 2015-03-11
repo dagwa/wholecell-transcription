@@ -149,4 +149,56 @@ with open(args.tx_units[0]) as tx_f:
 
   print('active states {}'.format(active_RNAp))
 
+# create SBML model
+
+def check(value, message):
+  """If 'value' is None, prints an error message constructed using
+  'message' and then exits with status code 1. If 'value' is an integer,
+  it assumes it is a libSBML return status code. If the code value is
+  LIBSBML_OPERATION_SUCCESS, returns without further action; if it is not,
+  prints an error message constructed using 'message' along with text from
+  libSBML explaining the meaning of the code, and exits with status code 1.
+  """
+  if value == None:
+    raise SystemExit('LibSBML returned a null value trying to ' + message + '.')
+  elif type(value) is int:
+    if value == libsbml.LIBSBML_OPERATION_SUCCESS:
+      return
+    else:
+      err_msg = 'Error encountered trying to ' + message + '.' \
+        + 'LibSBML returned error code ' + str(value) + ': "' \
+        + OperationReturnValue_toString(value).strip() + '"'
+      raise SystemExit(err_msg)
+  else:
+    return
+
+# http://sbml.org/Software/libSBML/docs/python-api/libsbml-python-creating-model.html
+
 document = libsbml.SBMLDocument(3, 1)
+model = document.createModel()
+check(model, 'create model')
+check(model.setTimeUnits("second"), 'set model-wide time units')
+check(model.setExtentUnits("mole"), 'set model units of extent')
+check(model.setSubstanceUnits('mole'), 'set model substance units')
+
+per_second = model.createUnitDefinition()
+check(per_second, 'create unit definition')
+check(per_second.setId('per_second'), 'set unit definition id')
+unit = per_second.createUnit()
+check(unit, 'create unit on per_second')
+check(unit.setKind(libsbml.UNIT_KIND_SECOND), 'set unit kind')
+check(unit.setExponent(-1), 'set unit exponent')
+check(unit.setScale(0), 'set unit scale')
+check(unit.setMultiplier(1), 'set unit multiplier')
+
+c1 = model.createCompartment()
+check(c1, 'create compartment')
+check(c1.setId('c1'), 'set compartment id')
+check(c1.setConstant(True), 'set compartment "constant"')
+check(c1.setSize(1), 'set compartment "size"')
+check(c1.setSpatialDimensions(3), 'set compartment dimensions')
+check(c1.setUnits('litre'), 'set compartment size units')
+
+sbmlstr = libsbml.writeSBMLToString(document)
+with open('/tmp/tx.sbml', 'w') as f:
+  f.write(sbmlstr)
