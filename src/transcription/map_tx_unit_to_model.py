@@ -119,8 +119,7 @@ class RNApSpecBoundStatePerLocus(RNApSpecBoundState):
     Return true if polymerase x is identical except for Markov state
     '''
     if isinstance(x, RNApSpecBoundStatePerLocus) and \
-      self.global_locus() == x.global_locus() and self.direction == x.direction and \
-      self.active == x.active:
+      self.global_locus() == x.global_locus() and self.direction == x.direction:
       #self.desc == x.desc:
         return True
     else:
@@ -194,19 +193,19 @@ class RNAp_states:
     return iter(self.active_RNAp + self.spec_bound_RNAp + self.active_sigma_bound_RNAp + [self.ns_bound_RNAp] + [self.free_RNAp])
 
 # Make specifically bound and active states for RNAp on each operon
-def make_states(states, tx_unit, locus, direction, active):
+def make_states(states, tx_unit, locus, direction):
   #states: RNAp_states
 
   if locus is not None:
     # Locus granularity
-    active_state = RNApSpecBoundStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = act, desc = 'active')
-    active_state_sigma_bound = RNApSpecBoundStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = act, desc = 'active_sigma_bound')
-    spec_bound_state = RNApSpecBoundStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = act, desc = 'spec_bound')
+    active_state = RNApSpecBoundStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = True, desc = 'active')
+    active_state_sigma_bound = RNApSpecBoundStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = True, desc = 'active_sigma_bound')
+    spec_bound_state = RNApSpecBoundStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = False, desc = 'spec_bound')
   else:
     # Operon granularity
-    active_state = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = act, desc = 'active')
-    active_state_sigma_bound = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = act, desc = 'active_sigma_bound')
-    spec_bound_state = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = act, desc = 'spec_bound')
+    active_state = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = True, desc = 'active')
+    active_state_sigma_bound = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = True, desc = 'active_sigma_bound')
+    spec_bound_state = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = False, desc = 'spec_bound')
 
   # Append to lists of all states
   states.add_active_RNAp_state(active_state)
@@ -248,12 +247,11 @@ with open(args.tx_units[0]) as tx_f:
 
       # Combinatorics for each param
       for direc in direc_range():
-        for act in [True, False]:
-          if perLocus:
-            for k in range(min(tu_length, tu_len_cutoff)):
-              make_states(states, tu_name, k, direc, act)
-          else:
-            make_states(states, tu_name, None, direc, act)
+        if perLocus:
+          for k in range(min(tu_length, tu_len_cutoff)):
+            make_states(states, tu_name, k, direc)
+        else:
+          make_states(states, tu_name, None, direc)
     except ValueError:
       # Discard header row etc.
       pass
