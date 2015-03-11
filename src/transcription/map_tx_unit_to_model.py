@@ -11,6 +11,6 @@ for i in args.input:
   with open(i) as f:
     reader = csv.reader(f)
     
-    lengthcol = 20
+    lengthcol = 5
     for row in reader:
       print(', '.join([row[0], row[lengthcol]]))
