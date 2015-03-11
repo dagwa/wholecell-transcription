@@ -1,7 +1,10 @@
+from __future__ import print_function
+
 import argparse
 import csv
 #import antimony # 2.7
 import libsbml
+from sets import Set as set
 
 parser = argparse.ArgumentParser(description='Map genes to model.')
 #parser.add_argument('input', metavar='I', type=str, nargs='+',
@@ -18,6 +21,20 @@ tu_len_cutoff = 3
 
 # Generate states per base pair?
 perLocus = args.locus
+
+# Find an element in a container
+def find(cont, cond):
+  result = None
+  for elt in cont:
+    if cond(elt):
+      if result is not None:
+        print('Warning: multiply defined elt')
+      result = elt
+      #return elt
+  #print('container: {}'.format(cont))
+  if result is None:
+    raise RuntimeError('No such element found')
+  return result
 
 class MakeStateName(object):
   def __call__(self, desc, tx_unit, direction, active):
@@ -95,7 +112,19 @@ class RNApSpecBoundStatePerLocus(RNApSpecBoundState):
     return MakeStateNamePerLocus()(self.desc, self.tx_unit, self.locus, self.direction, self.active)
 
   def global_locus(self):
-    return '_'.join(self.tx_unit, str(self.locus))
+    return '_'.join([self.tx_unit, str(self.locus)])
+
+  def matches_props(self, x):
+    '''
+    Return true if polymerase x is identical except for Markov state
+    '''
+    if isinstance(x, RNApSpecBoundStatePerLocus) and \
+      self.global_locus() == x.global_locus() and self.direction == x.direction and \
+      self.active == x.active:
+      #self.desc == x.desc:
+        return True
+    else:
+      return False
 
 
 def direc_range():
@@ -123,6 +152,11 @@ with open(args.genes[0]) as gene_f:
 
 # States for RNAp
 
+def add_state_to_map(map, locus_key, state):
+  if not locus_key in map:
+    map[locus_key] = set()
+  map[locus_key].add(state)
+
 class RNAp_states:
   def __init__(self):
     self.active_RNAp = []
@@ -132,19 +166,19 @@ class RNAp_states:
     self.free_RNAp = RNApState('RNAp_Free')
 
   def index(self):
-    self.active_state_for_unit = {}
-    self.active_state_sigma_bound_for_unit = {}
+    self.active_state_for_locus = {}
+    self.active_state_sigma_bound_for_locus = {}
     self.spec_bound_for_unit = {}
 
     for state in self.active_RNAp:
-      self.active_state_for_unit[state.global_locus()] = state
+      add_state_to_map(self.active_state_for_locus, state.global_locus(), state)
     for state in self.active_sigma_bound_RNAp:
-      self.active_state_sigma_bound_for_unit[state.global_locus()] = state
+      add_state_to_map(self.active_state_sigma_bound_for_locus, state.global_locus(), state)
     for state in self.spec_bound_RNAp:
-      self.spec_bound_for_unit[state.tx_unit] = state
+      add_state_to_map(self.spec_bound_for_unit, state.tx_unit, state)
 
   def map_spec_bound_to_active_state(self, state):
-    return self.active_state_for_unit[state.global_locus()]
+    return find(self.active_state_for_locus[state.global_locus()], lambda x: state.matches_props(x))
 
   def add_active_RNAp_state(self, state):
     self.active_RNAp.append(state)
