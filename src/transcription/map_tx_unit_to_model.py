@@ -483,7 +483,6 @@ for state in rnap_states.spec_bound_RNAp:
   check(kinetic_law.setMath(math_ast), 'set math on kinetic law')
 
 # Elongation reactions
-print(rnap_states.init_active_states)
 for init_state in rnap_states.init_active_states:
   state = init_state
   counter = 0
@@ -496,6 +495,25 @@ for init_state in rnap_states.init_active_states:
       check(r.setId('r_RNAp_elongation_tu{}_d{}_{}'.format(init_state.tx_unit, init_state.direction, counter)), 'set reaction id')
       check(r.setReversible(False), 'set reaction reversibility flag')
       check(r.setFast(False), 'set reaction "fast" attribute')
+
+      # Create reactant: polymerase at locus
+      reactant = r.createReactant()
+      check(reactant, 'create reactant')
+      check(reactant.setSpecies(state.id()), 'assign reactant species')
+      check(reactant.setConstant(False), 'set "constant" on species ref 1')
+
+      # Create product: active polymerase
+      product = r.createProduct()
+      check(product, 'create product')
+      check(product.setSpecies(nxt.id()), 'assign product species')
+      check(product.setConstant(False), 'set "constant" on species ref 2')
+
+      math_ast = libsbml.parseL3Formula('1')
+      check(math_ast, 'create AST for rate expression')
+
+      kinetic_law = r.createKineticLaw()
+      check(kinetic_law, 'create kinetic law')
+      check(kinetic_law.setMath(math_ast), 'set math on kinetic law')
 
       counter += 1
       state = nxt
