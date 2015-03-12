@@ -330,6 +330,9 @@ class Transcripts:
   def get_transcript_for_tu(self, tx_unit):
     return self.transcripts[tx_unit]
 
+  def __iter__(self):
+    return iter(self.transcripts.itervalues())
+
 # Make specifically bound and active states for RNAp on each operon
 def make_states(RNAp_states, tf_states, tx_unit, tu_length, direction):
   #RNAp_states: RNAp_RNAp_states
@@ -461,6 +464,21 @@ check(c1.setConstant(True), 'set compartment "constant"')
 check(c1.setSize(1), 'set compartment "size"')
 check(c1.setSpatialDimensions(3), 'set compartment dimensions')
 check(c1.setUnits('litre'), 'set compartment size units')
+
+# Create transcripts
+for ts in transcripts:
+  spec = model.createSpecies()
+  check(spec, 'create species spec')
+  idstr = ts.id()
+  #print(idstr)
+  check(spec.setId(idstr), 'set species spec id')
+  check(spec.setCompartment('c1'), 'set species spec compartment')
+  check(spec.setConstant(False), 'set "constant" attribute on spec')
+  check(spec.setInitialAmount(0), 'set initial amount for spec')
+  check(spec.setSubstanceUnits('item'), 'set substance units for spec')
+  check(spec.setBoundaryCondition(False), 'set "boundaryCondition" on spec')
+  check(spec.setHasOnlySubstanceUnits(False), 'set "hasOnlySubstanceUnits" on spec')
+
 
 # Create rnap_states
 for RNAp_state in rnap_states:
@@ -599,7 +617,7 @@ for bound_sigma_state in tf_states.bound_sigma:
   check(kinetic_law, 'create kinetic law')
   check(kinetic_law.setMath(math_ast), 'set math on kinetic law')
 
-if False:
+if True:
 
   # Elongation reactions
   for init_state in rnap_states.init_active_states:
@@ -629,7 +647,7 @@ if False:
         check(product.setConstant(False), 'set "constant" on species ref 2')
         check(product.setStoichiometry(1.), 'set stoichiometry')
 
-        math_ast = libsbml.parseL3Formula('1')
+        math_ast = libsbml.parseL3Formula(state.id())
         check(math_ast, 'create AST for rate expression')
 
         kinetic_law = r.createKineticLaw()
@@ -670,6 +688,13 @@ if False:
       check(product.setSpecies(free_pol.id()), 'assign product species')
       check(product.setConstant(False), 'set "constant" on species ref 2')
       check(product.setStoichiometry(1.), 'set stoichiometry')
+
+      math_ast = libsbml.parseL3Formula(state.id())
+      check(math_ast, 'create AST for rate expression')
+
+      kinetic_law = r.createKineticLaw()
+      check(kinetic_law, 'create kinetic law')
+      check(kinetic_law.setMath(math_ast), 'set math on kinetic law')
 
 
 
