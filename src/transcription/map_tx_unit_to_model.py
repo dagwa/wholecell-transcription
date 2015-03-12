@@ -6,6 +6,9 @@ import csv
 import libsbml
 from sets import Set as set
 
+class MissingItemError(LookupError):
+  pass
+
 parser = argparse.ArgumentParser(description='Map genes to model.')
 #parser.add_argument('input', metavar='I', type=str, nargs='+',
                     #help='Input files')
@@ -45,7 +48,7 @@ def find(cont, cond):
       #return elt
   #print('container: {}'.format(cont))
   if result is None:
-    raise RuntimeError('No such element found')
+    raise MissingItemError('No such element found')
   return result
 
 # Make ID for RNAp state
@@ -222,6 +225,8 @@ class RNAp_states:
       add_state_to_map(self.spec_bound_for_unit, state.tx_unit, state)
     for state in self.active_RNAp:
       add_state_to_map(self.active_state_for_locus, state.global_locus(), state)
+      if state.locus == 0:
+        self.init_active_states.add(state)
     #for state in self.active_sigma_bound_RNAp:
       #add_state_to_map(self.active_state_sigma_bound_for_locus, state.global_locus(), state)
 
@@ -230,6 +235,14 @@ class RNAp_states:
 
   #def map_tx_unit_to_active_state(self, tx_unit):
     #return find(self.active_state_for_locus[make_global_locus(tx_unit, 0)], lambda x: state.matches_props(x) and x.locus == 0)
+
+  def get_next_elongation_state(self, state):
+    #print('get_next_elongation_state: start {}'.format(state))
+    #print('get_next_elongation_state: {}'.format(self.active_state_for_locus[make_global_locus(state.tx_unit, state.locus+1)]))
+    try:
+      return find(self.active_state_for_locus[make_global_locus(state.tx_unit, state.locus+1)], lambda x: state.tx_unit == x.tx_unit and state.direction == x.direction and x.locus == state.locus+1)
+    except KeyError:
+      raise MissingItemError('No further elongation')
 
   def add_active_RNAp_state(self, state):
     self.active_RNAp.append(state)
@@ -340,7 +353,7 @@ with open(args.tx_units[0]) as tx_f:
       for direc in direc_range():
           make_states(rnap_states, tf_states, tu_name, tu_length, direc)
 
-      print('read tu {}: {}'.format(count, tu_name))
+      #print('read tu {}: {}'.format(count, tu_name))
       count += 1
       if tu_cutoff and count == tu_cutoff:
         break
@@ -470,7 +483,25 @@ for state in rnap_states.spec_bound_RNAp:
   check(kinetic_law.setMath(math_ast), 'set math on kinetic law')
 
 # Elongation reactions
-#for init_state in rnap_states.init_active_states:
+print(rnap_states.init_active_states)
+for init_state in rnap_states.init_active_states:
+  state = init_state
+  counter = 0
+  try:
+    while True:
+      nxt = rnap_states.get_next_elongation_state(state)
+      #print('nxt: {}'.format(nxt))
+      r = model.createReaction()
+      check(r, 'create reaction')
+      check(r.setId('r_RNAp_elongation_tu{}_d{}_{}'.format(init_state.tx_unit, init_state.direction, counter)), 'set reaction id')
+      check(r.setReversible(False), 'set reaction reversibility flag')
+      check(r.setFast(False), 'set reaction "fast" attribute')
+
+      counter += 1
+      state = nxt
+  except MissingItemError:
+    # At end of elongation
+    pass
 
 sbmlstr = libsbml.writeSBMLToString(document)
 with open('/tmp/tx.sbml', 'w') as f:
