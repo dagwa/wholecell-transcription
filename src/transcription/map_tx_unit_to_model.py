@@ -459,7 +459,7 @@ for RNAp_state in rnap_states:
   check(spec.setCompartment('c1'), 'set species spec compartment')
   check(spec.setConstant(False), 'set "constant" attribute on spec')
   # Different initialization from MATLAB code
-  if not RNAp_state.is_free:
+  if not RNAp_state.is_free():
     check(spec.setInitialAmount(0), 'set initial amount for spec')
   else:
     check(spec.setInitialAmount(50), 'set initial amount for spec')
@@ -483,12 +483,43 @@ for tf_state in tf_states:
 
 # Create reactions
 
-# Reaction: Activate specifically bound polymerase
+# Reaction: Specific binding of polymerase
 counter = 0
 for state in rnap_states.spec_bound_RNAp:
   active_state = rnap_states.map_spec_bound_to_active_state(state)
   sigma_bound_state = tf_states.map_spec_bound_to_simga_bound_state(state)
 
+  # ** Specifically bind polymerase
+  r = model.createReaction()
+  check(r, 'create reaction')
+  check(r.setId('r_RNAp_spec_to_active_{}'.format(counter)), 'set reaction id')
+  check(r.setReversible(False), 'set reaction reversibility flag')
+  check(r.setFast(False), 'set reaction "fast" attribute')
+  counter += 1
+
+  # Create reactant: free polymerase
+  reactant = r.createReactant()
+  check(reactant, 'create reactant')
+  check(reactant.setSpecies(rnap_states.free_RNAp.id()), 'assign reactant species')
+  check(reactant.setConstant(False), 'set "constant" on species ref 1')
+  check(reactant.setStoichiometry(1), 'set stoichiometry')
+
+  # Create product: specifically bound polymerase
+  product = r.createProduct()
+  check(product, 'create product')
+  check(product.setSpecies(state.id()), 'assign product species')
+  check(product.setConstant(False), 'set "constant" on species ref 2')
+  check(product.setStoichiometry(1), 'set stoichiometry')
+
+  math_ast = libsbml.parseL3Formula('1')
+  check(math_ast, 'create AST for rate expression')
+
+  kinetic_law = r.createKineticLaw()
+  check(kinetic_law, 'create kinetic law')
+  check(kinetic_law.setMath(math_ast), 'set math on kinetic law')
+
+
+  # ** Activate specifically bound polymerase
   r = model.createReaction()
   check(r, 'create reaction')
   check(r.setId('r_RNAp_spec_to_active_{}'.format(counter)), 'set reaction id')
@@ -501,89 +532,99 @@ for state in rnap_states.spec_bound_RNAp:
   check(reactant, 'create reactant')
   check(reactant.setSpecies(state.id()), 'assign reactant species')
   check(reactant.setConstant(False), 'set "constant" on species ref 1')
+  check(reactant.setStoichiometry(1), 'set stoichiometry')
 
   # Create product: active polymerase
   product = r.createProduct()
   check(product, 'create product')
   check(product.setSpecies(active_state.id()), 'assign product species')
   check(product.setConstant(False), 'set "constant" on species ref 2')
+  check(product.setStoichiometry(1), 'set stoichiometry')
 
   # Create modifier: sigma factor
   sigma = r.createModifier()
   check(sigma, 'create modifier')
   check(sigma.setSpecies(sigma_bound_state.id()), 'assign product species')
 
-  math_ast = libsbml.parseL3Formula(sigma_bound_state.id())
+  #math_ast = libsbml.parseL3Formula(sigma_bound_state.id())
+  math_ast = libsbml.parseL3Formula('1')
   check(math_ast, 'create AST for rate expression')
 
   kinetic_law = r.createKineticLaw()
   check(kinetic_law, 'create kinetic law')
   check(kinetic_law.setMath(math_ast), 'set math on kinetic law')
 
-# Elongation reactions
-for init_state in rnap_states.init_active_states:
-  state = init_state
-  counter = 0
-  try:
-    while True:
-      nxt = rnap_states.get_next_elongation_state(state)
-      #print('nxt: {}'.format(nxt))
+if False:
+
+  # Elongation reactions
+  for init_state in rnap_states.init_active_states:
+    state = init_state
+    counter = 0
+    try:
+      while True:
+        nxt = rnap_states.get_next_elongation_state(state)
+        #print('nxt: {}'.format(nxt))
+        r = model.createReaction()
+        check(r, 'create reaction')
+        check(r.setId('r_RNAp_elongation_tu{}_d{}_{}'.format(init_state.tx_unit, init_state.direction, counter)), 'set reaction id')
+        check(r.setReversible(False), 'set reaction reversibility flag')
+        check(r.setFast(False), 'set reaction "fast" attribute')
+
+        # Create reactant: polymerase at locus
+        reactant = r.createReactant()
+        check(reactant, 'create reactant')
+        check(reactant.setSpecies(state.id()), 'assign reactant species')
+        check(reactant.setConstant(False), 'set "constant" on species ref 1')
+        check(reactant.setStoichiometry(1), 'set stoichiometry')
+
+        # Create product: active polymerase
+        product = r.createProduct()
+        check(product, 'create product')
+        check(product.setSpecies(nxt.id()), 'assign product species')
+        check(product.setConstant(False), 'set "constant" on species ref 2')
+        check(product.setStoichiometry(1), 'set stoichiometry')
+
+        math_ast = libsbml.parseL3Formula('1')
+        check(math_ast, 'create AST for rate expression')
+
+        kinetic_law = r.createKineticLaw()
+        check(kinetic_law, 'create kinetic law')
+        check(kinetic_law.setMath(math_ast), 'set math on kinetic law')
+
+        counter += 1
+        state = nxt
+    except MissingItemError:
+      # At end of elongation
+
+      # Termination reaction
       r = model.createReaction()
       check(r, 'create reaction')
-      check(r.setId('r_RNAp_elongation_tu{}_d{}_{}'.format(init_state.tx_unit, init_state.direction, counter)), 'set reaction id')
+      check(r.setId('r_RNAp_termination_tu{}_d{}'.format(init_state.tx_unit, init_state.direction)), 'set reaction id')
       check(r.setReversible(False), 'set reaction reversibility flag')
       check(r.setFast(False), 'set reaction "fast" attribute')
 
-      # Create reactant: polymerase at locus
+      # Create reactant: polymerase
       reactant = r.createReactant()
       check(reactant, 'create reactant')
       check(reactant.setSpecies(state.id()), 'assign reactant species')
       check(reactant.setConstant(False), 'set "constant" on species ref 1')
+      check(reactant.setStoichiometry(1), 'set stoichiometry')
 
-      # Create product: active polymerase
+      # Create product: finished transcript
+      transcript = transcripts.get_transcript_for_tu(state.tx_unit)
       product = r.createProduct()
       check(product, 'create product')
-      check(product.setSpecies(nxt.id()), 'assign product species')
+      check(product.setSpecies(transcript.id()), 'assign product species')
       check(product.setConstant(False), 'set "constant" on species ref 2')
+      check(product.setStoichiometry(1), 'set stoichiometry')
 
-      math_ast = libsbml.parseL3Formula('1')
-      check(math_ast, 'create AST for rate expression')
-
-      kinetic_law = r.createKineticLaw()
-      check(kinetic_law, 'create kinetic law')
-      check(kinetic_law.setMath(math_ast), 'set math on kinetic law')
-
-      counter += 1
-      state = nxt
-  except MissingItemError:
-    # At end of elongation
-
-    # Termination reaction
-    r = model.createReaction()
-    check(r, 'create reaction')
-    check(r.setId('r_RNAp_termination_tu{}_d{}'.format(init_state.tx_unit, init_state.direction)), 'set reaction id')
-    check(r.setReversible(False), 'set reaction reversibility flag')
-    check(r.setFast(False), 'set reaction "fast" attribute')
-
-    # Create reactant: polymerase
-    reactant = r.createReactant()
-    check(reactant, 'create reactant')
-    check(reactant.setSpecies(state.id()), 'assign reactant species')
-    check(reactant.setConstant(False), 'set "constant" on species ref 1')
-
-    # Create product: finished transcript
-    transcript = transcripts.get_transcript_for_tu(state.tx_unit)
-    product = r.createProduct()
-    check(product, 'create product')
-    check(product.setSpecies(transcript.id()), 'assign product species')
-    check(product.setConstant(False), 'set "constant" on species ref 2')
-
-    # Create product: free polymerase
-    free_pol = rnap_states.free_RNAp
-    product = r.createProduct()
-    check(product, 'create product')
-    check(product.setSpecies(free_pol.id()), 'assign product species')
-    check(product.setConstant(False), 'set "constant" on species ref 2')
+      # Create product: free polymerase
+      free_pol = rnap_states.free_RNAp
+      product = r.createProduct()
+      check(product, 'create product')
+      check(product.setSpecies(free_pol.id()), 'assign product species')
+      check(product.setConstant(False), 'set "constant" on species ref 2')
+      check(product.setStoichiometry(1), 'set stoichiometry')
 
 
 
