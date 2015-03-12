@@ -502,14 +502,14 @@ for state in rnap_states.spec_bound_RNAp:
   check(reactant, 'create reactant')
   check(reactant.setSpecies(rnap_states.free_RNAp.id()), 'assign reactant species')
   check(reactant.setConstant(False), 'set "constant" on species ref 1')
-  check(reactant.setStoichiometry(1), 'set stoichiometry')
+  check(reactant.setStoichiometry(1.), 'set stoichiometry')
 
   # Create product: specifically bound polymerase
   product = r.createProduct()
   check(product, 'create product')
   check(product.setSpecies(state.id()), 'assign product species')
   check(product.setConstant(False), 'set "constant" on species ref 2')
-  check(product.setStoichiometry(1), 'set stoichiometry')
+  check(product.setStoichiometry(1.), 'set stoichiometry')
 
   math_ast = libsbml.parseL3Formula('1')
   check(math_ast, 'create AST for rate expression')
@@ -532,14 +532,14 @@ for state in rnap_states.spec_bound_RNAp:
   check(reactant, 'create reactant')
   check(reactant.setSpecies(state.id()), 'assign reactant species')
   check(reactant.setConstant(False), 'set "constant" on species ref 1')
-  check(reactant.setStoichiometry(1), 'set stoichiometry')
+  check(reactant.setStoichiometry(1.), 'set stoichiometry')
 
   # Create product: active polymerase
   product = r.createProduct()
   check(product, 'create product')
   check(product.setSpecies(active_state.id()), 'assign product species')
   check(product.setConstant(False), 'set "constant" on species ref 2')
-  check(product.setStoichiometry(1), 'set stoichiometry')
+  check(product.setStoichiometry(1.), 'set stoichiometry')
 
   # Create modifier: sigma factor
   sigma = r.createModifier()
@@ -575,14 +575,14 @@ if False:
         check(reactant, 'create reactant')
         check(reactant.setSpecies(state.id()), 'assign reactant species')
         check(reactant.setConstant(False), 'set "constant" on species ref 1')
-        check(reactant.setStoichiometry(1), 'set stoichiometry')
+        check(reactant.setStoichiometry(1.), 'set stoichiometry')
 
         # Create product: active polymerase
         product = r.createProduct()
         check(product, 'create product')
         check(product.setSpecies(nxt.id()), 'assign product species')
         check(product.setConstant(False), 'set "constant" on species ref 2')
-        check(product.setStoichiometry(1), 'set stoichiometry')
+        check(product.setStoichiometry(1.), 'set stoichiometry')
 
         math_ast = libsbml.parseL3Formula('1')
         check(math_ast, 'create AST for rate expression')
@@ -608,7 +608,7 @@ if False:
       check(reactant, 'create reactant')
       check(reactant.setSpecies(state.id()), 'assign reactant species')
       check(reactant.setConstant(False), 'set "constant" on species ref 1')
-      check(reactant.setStoichiometry(1), 'set stoichiometry')
+      check(reactant.setStoichiometry(1.), 'set stoichiometry')
 
       # Create product: finished transcript
       transcript = transcripts.get_transcript_for_tu(state.tx_unit)
@@ -616,7 +616,7 @@ if False:
       check(product, 'create product')
       check(product.setSpecies(transcript.id()), 'assign product species')
       check(product.setConstant(False), 'set "constant" on species ref 2')
-      check(product.setStoichiometry(1), 'set stoichiometry')
+      check(product.setStoichiometry(1.), 'set stoichiometry')
 
       # Create product: free polymerase
       free_pol = rnap_states.free_RNAp
@@ -624,7 +624,7 @@ if False:
       check(product, 'create product')
       check(product.setSpecies(free_pol.id()), 'assign product species')
       check(product.setConstant(False), 'set "constant" on species ref 2')
-      check(product.setStoichiometry(1), 'set stoichiometry')
+      check(product.setStoichiometry(1.), 'set stoichiometry')
 
 
 
