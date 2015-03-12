@@ -204,7 +204,7 @@ def add_state_to_map(map, locus_key, state):
 class RNAp_states:
   def __init__(self):
     self.active_RNAp = []
-    self.active_sigma_bound_RNAp = []
+    #self.active_sigma_bound_RNAp = []
     self.spec_bound_RNAp = []
     self.ns_bound_RNAp = RNApBoundState('RNAp_NonSpecBound')
     self.free_RNAp = RNApState('RNAp_Free')
@@ -213,13 +213,17 @@ class RNAp_states:
     self.active_state_for_locus = {}
     self.active_state_sigma_bound_for_locus = {}
     self.spec_bound_for_unit = {}
+    self.tx_units = set()
+    # Initial active states of RNAp - transcript length 0
+    self.init_active_states = set()
 
+    for state in self.spec_bound_RNAp:
+      self.tx_units.add(state.tx_unit)
+      add_state_to_map(self.spec_bound_for_unit, state.tx_unit, state)
     for state in self.active_RNAp:
       add_state_to_map(self.active_state_for_locus, state.global_locus(), state)
-    for state in self.active_sigma_bound_RNAp:
-      add_state_to_map(self.active_state_sigma_bound_for_locus, state.global_locus(), state)
-    for state in self.spec_bound_RNAp:
-      add_state_to_map(self.spec_bound_for_unit, state.tx_unit, state)
+    #for state in self.active_sigma_bound_RNAp:
+      #add_state_to_map(self.active_state_sigma_bound_for_locus, state.global_locus(), state)
 
   def map_spec_bound_to_active_state(self, state):
     return find(self.active_state_for_locus[make_global_locus(state.tx_unit, 0)], lambda x: state.matches_props(x) and x.locus == 0)
@@ -230,21 +234,23 @@ class RNAp_states:
   def add_active_RNAp_state(self, state):
     self.active_RNAp.append(state)
 
-  def add_active_sigma_bound_RNAp_state(self, state):
-    self.active_sigma_bound_RNAp.append(state)
+  #def add_active_sigma_bound_RNAp_state(self, state):
+    #self.active_sigma_bound_RNAp.append(state)
 
   def add_spec_bound_RNAp_state(self, state):
     self.spec_bound_RNAp.append(state)
 
   # Allow iterating over states
   def __iter__(self):
-    return iter(self.active_RNAp + self.spec_bound_RNAp + self.active_sigma_bound_RNAp + [self.ns_bound_RNAp] + [self.free_RNAp])
+    #return iter(self.active_RNAp + self.spec_bound_RNAp + self.active_sigma_bound_RNAp + [self.ns_bound_RNAp] + [self.free_RNAp])
+    return iter(self.active_RNAp + self.spec_bound_RNAp + [self.ns_bound_RNAp] + [self.free_RNAp])
 
 # Collection of transcription factor states
 class TF_states:
   def __init__(self):
     self.bound_sigma = []
     self.free_sigma = SigmaState('Sigma_Free')
+
     self.tx_unit_to_simga_bound_state = {}
 
   def add_sigma_factor_bound(self, state):
@@ -262,6 +268,10 @@ class TF_states:
     for state in bound_sigma:
       self.bound_sigma_for_locus[state.tx_unit] = state
 
+  # Allow iterating over states
+  def __iter__(self):
+    return iter(self.bound_sigma + [self.free_sigma])
+
 
 # Make specifically bound and active states for RNAp on each operon
 def make_states(RNAp_states, tf_states, tx_unit, tu_length, direction):
@@ -271,18 +281,22 @@ def make_states(RNAp_states, tf_states, tx_unit, tu_length, direction):
   if tu_len_cutoff is not None:
     for k in range(min(tu_length, tu_len_cutoff)):
       # Locus granularity
-      active_state = RNApSpecBoundStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = True, desc = 'active')
-      active_state_sigma_bound = RNApSpecBoundStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = True, desc = 'active_sigma_bound')
+      active_state = RNApSpecBoundStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = True, desc = 'RNAp_active')
+      #active_state_sigma_bound = RNApSpecBoundStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = True, desc = 'active_sigma_bound')
 
       # Add active states
       RNAp_states.add_active_RNAp_state(active_state)
-      RNAp_states.add_active_sigma_bound_RNAp_state(active_state_sigma_bound)
+      #RNAp_states.add_active_sigma_bound_RNAp_state(active_state_sigma_bound)
   else:
     # Operon granularity
-    active_state = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = True, desc = 'active')
-    active_state_sigma_bound = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = True, desc = 'active_sigma_bound')
+    active_state = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = True, desc = 'RNAp_active')
+    #active_state_sigma_bound = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = True, desc = 'active_sigma_bound')
 
-  spec_bound_state = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = False, desc = 'spec_bound')
+    # Add active states
+    RNAp_states.add_active_RNAp_state(active_state)
+    #RNAp_states.add_active_sigma_bound_RNAp_state(active_state_sigma_bound)
+
+  spec_bound_state = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = False, desc = 'RNAp_spec_bound')
 
   # Append specifically bound statest to lists of all RNAp_states
   RNAp_states.add_spec_bound_RNAp_state(spec_bound_state)
@@ -402,9 +416,23 @@ for RNAp_state in rnap_states:
   check(spec.setBoundaryCondition(False), 'set "boundaryCondition" on spec')
   check(spec.setHasOnlySubstanceUnits(False), 'set "hasOnlySubstanceUnits" on spec')
 
+# Create TF states
+for tf_state in tf_states:
+  spec = model.createSpecies()
+  check(spec, 'create species spec')
+  idstr = tf_state.id()
+  #print(idstr)
+  check(spec.setId(idstr), 'set species spec id')
+  check(spec.setCompartment('c1'), 'set species spec compartment')
+  check(spec.setConstant(False), 'set "constant" attribute on spec')
+  check(spec.setInitialAmount(0), 'set initial amount for spec')
+  check(spec.setSubstanceUnits('item'), 'set substance units for spec')
+  check(spec.setBoundaryCondition(False), 'set "boundaryCondition" on spec')
+  check(spec.setHasOnlySubstanceUnits(False), 'set "hasOnlySubstanceUnits" on spec')
+
 # Create reactions
 
-# Create rnap_states spec_bound -> active
+# Reaction: Activate specifically bound polymerase
 counter = 0
 for state in rnap_states.spec_bound_RNAp:
   active_state = rnap_states.map_spec_bound_to_active_state(state)
@@ -412,7 +440,7 @@ for state in rnap_states.spec_bound_RNAp:
 
   r = model.createReaction()
   check(r, 'create reaction')
-  check(r.setId('r_spec_to_active_{}'.format(counter)), 'set reaction id')
+  check(r.setId('r_RNAp_spec_to_active_{}'.format(counter)), 'set reaction id')
   check(r.setReversible(False), 'set reaction reversibility flag')
   check(r.setFast(False), 'set reaction "fast" attribute')
   counter += 1
@@ -440,6 +468,9 @@ for state in rnap_states.spec_bound_RNAp:
   kinetic_law = r.createKineticLaw()
   check(kinetic_law, 'create kinetic law')
   check(kinetic_law.setMath(math_ast), 'set math on kinetic law')
+
+# Elongation reactions
+#for init_state in rnap_states.init_active_states:
 
 sbmlstr = libsbml.writeSBMLToString(document)
 with open('/tmp/tx.sbml', 'w') as f:
