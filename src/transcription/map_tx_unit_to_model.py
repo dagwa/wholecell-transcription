@@ -48,6 +48,7 @@ def find(cont, cond):
     raise RuntimeError('No such element found')
   return result
 
+# Make ID for RNAp state
 class MakeStateName(object):
   def __call__(self, desc, tx_unit, direction, active):
     '''
@@ -157,11 +158,17 @@ class SigmaState(object):
   def __init__(self, desc):
     self.desc = desc
 
+  def id(self):
+    return self.desc
+
 class SigmaFactorBoundState(SigmaState):
   def __init__(self, tx_unit, direction, desc):
     self.tx_unit = tx_unit
     self.direction = direction
     self.desc = desc
+
+  def id(self):
+    return '{}_tu{}_dir{}'.format(self.desc, self.tx_unit, self.direction)
 
 def direc_range():
   '''
@@ -217,6 +224,9 @@ class RNAp_states:
   def map_spec_bound_to_active_state(self, state):
     return find(self.active_state_for_locus[make_global_locus(state.tx_unit, 0)], lambda x: state.matches_props(x) and x.locus == 0)
 
+  #def map_tx_unit_to_active_state(self, tx_unit):
+    #return find(self.active_state_for_locus[make_global_locus(tx_unit, 0)], lambda x: state.matches_props(x) and x.locus == 0)
+
   def add_active_RNAp_state(self, state):
     self.active_RNAp.append(state)
 
@@ -235,9 +245,17 @@ class TF_states:
   def __init__(self):
     self.bound_sigma = []
     self.free_sigma = SigmaState('Sigma_Free')
+    self.tx_unit_to_simga_bound_state = {}
 
   def add_sigma_factor_bound(self, state):
     self.bound_sigma.append(state)
+    add_state_to_map(self.tx_unit_to_simga_bound_state, state.tx_unit, state)
+
+  def map_spec_bound_to_simga_bound_state(self, state):
+    return find(self.tx_unit_to_simga_bound_state[state.tx_unit], lambda x: state.tx_unit == x.tx_unit and state.direction == x.direction)
+
+  #def map_tx_unit_to_simga_bound_state(self, tx_unit):
+    #return self.tx_unit_to_simga_bound_state[tx_unit]
 
   def index(self):
     self.bound_sigma_for_locus = {}
@@ -308,10 +326,10 @@ with open(args.tx_units[0]) as tx_f:
       for direc in direc_range():
           make_states(rnap_states, tf_states, tu_name, tu_length, direc)
 
+      print('read tu {}: {}'.format(count, tu_name))
+      count += 1
       if tu_cutoff and count == tu_cutoff:
         break
-      count += 1
-      print('read tu {}: {}'.format(count, tu_name))
     except ValueError:
       # Discard header row etc.
       pass
@@ -390,6 +408,7 @@ for RNAp_state in rnap_states:
 counter = 0
 for state in rnap_states.spec_bound_RNAp:
   active_state = rnap_states.map_spec_bound_to_active_state(state)
+  sigma_bound_state = tf_states.map_spec_bound_to_simga_bound_state(state)
 
   r = model.createReaction()
   check(r, 'create reaction')
@@ -410,7 +429,12 @@ for state in rnap_states.spec_bound_RNAp:
   check(product.setSpecies(active_state.id()), 'assign product species')
   check(product.setConstant(False), 'set "constant" on species ref 2')
 
-  math_ast = libsbml.parseL3Formula('1')
+  # Create modifier: sigma factor
+  sigma = r.createModifier()
+  check(sigma, 'create modifier')
+  check(sigma.setSpecies(sigma_bound_state.id()), 'assign product species')
+
+  math_ast = libsbml.parseL3Formula(sigma_bound_state.id())
   check(math_ast, 'create AST for rate expression')
 
   kinetic_law = r.createKineticLaw()
