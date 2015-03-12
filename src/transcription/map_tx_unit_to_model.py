@@ -171,6 +171,19 @@ class SigmaState(object):
   def id(self):
     return self.desc
 
+  def is_free(self):
+    return False
+
+class SigmaFreeState(object):
+  def __init__(self, desc):
+    self.desc = desc
+
+  def id(self):
+    return self.desc
+
+  def is_free(self):
+    return True
+
 class SigmaFactorBoundState(SigmaState):
   def __init__(self, tx_unit, direction, desc):
     self.tx_unit = tx_unit
@@ -284,7 +297,7 @@ class RNAp_states:
 class TF_states:
   def __init__(self):
     self.bound_sigma = []
-    self.free_sigma = SigmaState('Sigma_Free')
+    self.free_sigma = SigmaFreeState('Sigma_Free')
 
     self.tx_unit_to_simga_bound_state = {}
 
@@ -476,7 +489,10 @@ for tf_state in tf_states:
   check(spec.setId(idstr), 'set species spec id')
   check(spec.setCompartment('c1'), 'set species spec compartment')
   check(spec.setConstant(False), 'set "constant" attribute on spec')
-  check(spec.setInitialAmount(0), 'set initial amount for spec')
+  if tf_state.is_free():
+    check(spec.setInitialAmount(50.), 'set initial amount for spec')
+  else:
+    check(spec.setInitialAmount(0), 'set initial amount for spec')
   check(spec.setSubstanceUnits('item'), 'set substance units for spec')
   check(spec.setBoundaryCondition(False), 'set "boundaryCondition" on spec')
   check(spec.setHasOnlySubstanceUnits(False), 'set "hasOnlySubstanceUnits" on spec')
@@ -575,6 +591,13 @@ for bound_sigma_state in tf_states.bound_sigma:
   check(product.setSpecies(bound_sigma_state.id()), 'assign product species')
   check(product.setConstant(False), 'set "constant" on species ref 2')
   check(product.setStoichiometry(1.), 'set stoichiometry')
+
+  math_ast = libsbml.parseL3Formula('0.5')
+  check(math_ast, 'create AST for rate expression')
+
+  kinetic_law = r.createKineticLaw()
+  check(kinetic_law, 'create kinetic law')
+  check(kinetic_law.setMath(math_ast), 'set math on kinetic law')
 
 if False:
 
