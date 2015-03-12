@@ -11,7 +11,7 @@ parser = argparse.ArgumentParser(description='Map genes to model.')
                     #help='Input files')
 parser.add_argument('--tx-units', dest='tx_units', nargs=1, help='Transcription units CSV')
 parser.add_argument('--genes', dest='genes', nargs=1, help='Genes units CSV')
-
+parser.add_argument('--bp-cutoff', dest='bp_cutoff', type=int, nargs=1, default=[3], help='Maximum number of base pairs per transcription unit')
 parser.add_argument('--tu-cutoff', dest='tu_cutoff', type=int, nargs=1, default=[None], help='Maximum number of transcription units to use')
 parser.add_argument('--locus', dest='locus', action='store_const',
                    const=True, default=False,
@@ -20,7 +20,7 @@ parser.add_argument('--locus', dest='locus', action='store_const',
 args = parser.parse_args()
 
 # Cutoff length of a transcription unit
-tu_len_cutoff = 3
+tu_len_cutoff = args.bp_cutoff[0]
 
 # Max number of transcription units to include (None for all)
 tu_cutoff = args.tu_cutoff[0]
@@ -264,7 +264,7 @@ with open(args.tx_units[0]) as tx_f:
       if tu_cutoff and count == tu_cutoff:
         break
       count += 1
-      print('read tu {}'.format(count))
+      print('read tu {}: {}'.format(count, tu_name))
     except ValueError:
       # Discard header row etc.
       pass
