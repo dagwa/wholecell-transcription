@@ -11,13 +11,19 @@ parser = argparse.ArgumentParser(description='Map genes to model.')
                     #help='Input files')
 parser.add_argument('--tx-units', dest='tx_units', nargs=1, help='Transcription units CSV')
 parser.add_argument('--genes', dest='genes', nargs=1, help='Genes units CSV')
+
+parser.add_argument('--tu-cutoff', dest='tu_cutoff', type=int, nargs=1, default=[None], help='Maximum number of transcription units to use')
 parser.add_argument('--locus', dest='locus', action='store_const',
                    const=True, default=False,
                    help='Generate per-locus')
 
 args = parser.parse_args()
 
+# Cutoff length of a transcription unit
 tu_len_cutoff = 3
+
+# Max number of transcription units to include (None for all)
+tu_cutoff = args.tu_cutoff[0]
 
 # Generate states per base pair?
 perLocus = args.locus
@@ -156,6 +162,7 @@ def add_state_to_map(map, locus_key, state):
     map[locus_key] = set()
   map[locus_key].add(state)
 
+# Collection of polymerase states
 class RNAp_states:
   def __init__(self):
     self.active_RNAp = []
@@ -232,6 +239,7 @@ with open(args.tx_units[0]) as tx_f:
   antmdl = ''
 
   # Get gene names, properties
+  count = 0
   for row in tu_reader:
     try:
       tu_name = row[namecol].replace(' ', '_').replace('-', 'X').replace(',', '_')
@@ -252,6 +260,11 @@ with open(args.tx_units[0]) as tx_f:
             make_states(states, tu_name, k, direc)
         else:
           make_states(states, tu_name, None, direc)
+
+      if tu_cutoff and count == tu_cutoff:
+        break
+      count += 1
+      print('read tu {}'.format(count))
     except ValueError:
       # Discard header row etc.
       pass
