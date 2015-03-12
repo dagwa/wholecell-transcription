@@ -28,6 +28,12 @@ tu_cutoff = args.tu_cutoff[0]
 # Generate states per base pair?
 perLocus = args.locus
 
+def make_global_locus(tx_unit, locus=None):
+  if locus is not None:
+    return '_'.join([tx_unit, str(locus)])
+  else:
+    return tx_unit
+
 # Find an element in a container
 def find(cont, cond):
   result = None
@@ -107,7 +113,18 @@ class RNApSpecBoundState(RNApBoundState):
     return self.__repr__()
 
   def global_locus(self):
-    return self.tx_unit
+    return make_global_locus(self.tx_unit)
+
+  def matches_props(self, x):
+    '''
+    Return true if polymerase x is identical except for Markov state
+    '''
+    if isinstance(x, RNApSpecBoundStatePerLocus) and \
+      self.tx_unit == x.tx_unit and self.direction == x.direction:
+      #self.desc == x.desc:
+        return True
+    else:
+      return False
 
 class RNApSpecBoundStatePerLocus(RNApSpecBoundState):
   def __init__(self, tx_unit, locus, direction, active, desc):
@@ -118,7 +135,7 @@ class RNApSpecBoundStatePerLocus(RNApSpecBoundState):
     return MakeStateNamePerLocus()(self.desc, self.tx_unit, self.locus, self.direction, self.active)
 
   def global_locus(self):
-    return '_'.join([self.tx_unit, str(self.locus)])
+    return make_global_locus(self.tx_unit, self.locus)
 
   def matches_props(self, x):
     '''
@@ -131,6 +148,20 @@ class RNApSpecBoundStatePerLocus(RNApSpecBoundState):
     else:
       return False
 
+
+# --------------
+# Transcription Factors
+# --------------
+
+class SigmaState(object):
+  def __init__(self, desc):
+    self.desc = desc
+
+class SigmaFactorBoundState(SigmaState):
+  def __init__(self, tx_unit, direction, desc):
+    self.tx_unit = tx_unit
+    self.direction = direction
+    self.desc = desc
 
 def direc_range():
   '''
@@ -184,7 +215,7 @@ class RNAp_states:
       add_state_to_map(self.spec_bound_for_unit, state.tx_unit, state)
 
   def map_spec_bound_to_active_state(self, state):
-    return find(self.active_state_for_locus[state.global_locus()], lambda x: state.matches_props(x))
+    return find(self.active_state_for_locus[make_global_locus(state.tx_unit, 0)], lambda x: state.matches_props(x) and x.locus == 0)
 
   def add_active_RNAp_state(self, state):
     self.active_RNAp.append(state)
@@ -199,33 +230,53 @@ class RNAp_states:
   def __iter__(self):
     return iter(self.active_RNAp + self.spec_bound_RNAp + self.active_sigma_bound_RNAp + [self.ns_bound_RNAp] + [self.free_RNAp])
 
-# Make specifically bound and active states for RNAp on each operon
-def make_states(states, tx_unit, locus, direction):
-  #states: RNAp_states
+# Collection of transcription factor states
+class TF_states:
+  def __init__(self):
+    self.bound_sigma = []
+    self.free_sigma = SigmaState('Sigma_Free')
 
-  if locus is not None:
-    # Locus granularity
-    active_state = RNApSpecBoundStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = True, desc = 'active')
-    active_state_sigma_bound = RNApSpecBoundStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = True, desc = 'active_sigma_bound')
-    spec_bound_state = RNApSpecBoundStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = False, desc = 'spec_bound')
+  def add_sigma_factor_bound(self, state):
+    self.bound_sigma.append(state)
+
+  def index(self):
+    self.bound_sigma_for_locus = {}
+    for state in bound_sigma:
+      self.bound_sigma_for_locus[state.tx_unit] = state
+
+
+# Make specifically bound and active states for RNAp on each operon
+def make_states(RNAp_states, tf_states, tx_unit, tu_length, direction):
+  #RNAp_states: RNAp_RNAp_states
+
+  # Polymerase has active state per locus
+  if tu_len_cutoff is not None:
+    for k in range(min(tu_length, tu_len_cutoff)):
+      # Locus granularity
+      active_state = RNApSpecBoundStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = True, desc = 'active')
+      active_state_sigma_bound = RNApSpecBoundStatePerLocus(tx_unit = tu_name, locus = k, direction = direc, active = True, desc = 'active_sigma_bound')
+
+      # Add active states
+      RNAp_states.add_active_RNAp_state(active_state)
+      RNAp_states.add_active_sigma_bound_RNAp_state(active_state_sigma_bound)
   else:
     # Operon granularity
     active_state = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = True, desc = 'active')
     active_state_sigma_bound = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = True, desc = 'active_sigma_bound')
-    spec_bound_state = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = False, desc = 'spec_bound')
 
-  # Append to lists of all states
-  states.add_active_RNAp_state(active_state)
-  states.add_active_sigma_bound_RNAp_state(active_state_sigma_bound)
-  states.add_spec_bound_RNAp_state(spec_bound_state)
+  spec_bound_state = RNApSpecBoundState(tx_unit = tu_name, direction = direc, active = False, desc = 'spec_bound')
 
+  # Append specifically bound statest to lists of all RNAp_states
+  RNAp_states.add_spec_bound_RNAp_state(spec_bound_state)
 
-#def RNAp_states():
-  #return active_RNAp + spec_bound_RNAp + active_sigma_bound_RNAp + [ns_bound_RNAp] + [free_RNAp]
+  # Append transcription factor states
+  tf_states.add_sigma_factor_bound(SigmaFactorBoundState(tx_unit = tu_name, direction = direc, desc = 'Sigma_Bound'))
 
-states = RNAp_states()
+rnap_states = RNAp_states()
 
-#for i in args.input:
+tf_states = TF_states()
+
+# Read transcription units and create states
 with open(args.tx_units[0]) as tx_f:
   # Read CSV
   tu_reader = csv.reader(tx_f)
@@ -255,11 +306,7 @@ with open(args.tx_units[0]) as tx_f:
 
       # Combinatorics for each param
       for direc in direc_range():
-        if perLocus:
-          for k in range(min(tu_length, tu_len_cutoff)):
-            make_states(states, tu_name, k, direc)
-        else:
-          make_states(states, tu_name, None, direc)
+          make_states(rnap_states, tf_states, tu_name, tu_length, direc)
 
       if tu_cutoff and count == tu_cutoff:
         break
@@ -269,7 +316,7 @@ with open(args.tx_units[0]) as tx_f:
       # Discard header row etc.
       pass
 
-  #print('active states {}'.format(active_RNAp))
+  #print('active rnap_states {}'.format(active_RNAp))
 
 # create SBML model
 
@@ -294,7 +341,7 @@ def check(value, message):
   else:
     return
 
-states.index()
+rnap_states.index()
 
 # http://sbml.org/Software/libSBML/docs/python-api/libsbml-python-creating-model.html
 
@@ -323,8 +370,8 @@ check(c1.setSize(1), 'set compartment "size"')
 check(c1.setSpatialDimensions(3), 'set compartment dimensions')
 check(c1.setUnits('litre'), 'set compartment size units')
 
-# Create states
-for RNAp_state in states:
+# Create rnap_states
+for RNAp_state in rnap_states:
   spec = model.createSpecies()
   check(spec, 'create species spec')
   idstr = RNAp_state.id()
@@ -339,10 +386,10 @@ for RNAp_state in states:
 
 # Create reactions
 
-# Create states spec_bound -> active
+# Create rnap_states spec_bound -> active
 counter = 0
-for state in states.spec_bound_RNAp:
-  active_state = states.map_spec_bound_to_active_state(state)
+for state in rnap_states.spec_bound_RNAp:
+  active_state = rnap_states.map_spec_bound_to_active_state(state)
 
   r = model.createReaction()
   check(r, 'create reaction')
@@ -351,11 +398,13 @@ for state in states.spec_bound_RNAp:
   check(r.setFast(False), 'set reaction "fast" attribute')
   counter += 1
 
+  # Create reactant: specifically bound polymerase
   reactant = r.createReactant()
   check(reactant, 'create reactant')
   check(reactant.setSpecies(state.id()), 'assign reactant species')
   check(reactant.setConstant(False), 'set "constant" on species ref 1')
 
+  # Create product: active polymerase
   product = r.createProduct()
   check(product, 'create product')
   check(product.setSpecies(active_state.id()), 'assign product species')
