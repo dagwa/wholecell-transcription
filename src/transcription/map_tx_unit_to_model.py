@@ -173,6 +173,21 @@ class SigmaFactorBoundState(SigmaState):
   def id(self):
     return '{}_tu{}_dir{}'.format(self.desc, self.tx_unit, self.direction)
 
+
+# --------------
+# Transcripts
+# --------------
+
+class Transcript:
+  def __init__(self, tx_unit, genes, seq):
+    self.tx_unit = tx_unit
+    self.genes = genes
+    self.seq = seq
+
+  def id(self):
+    return 'Transcript_{}'.format(self.tx_unit)
+
+
 def direc_range():
   '''
   Range of values for polymerase direction
@@ -285,6 +300,15 @@ class TF_states:
   def __iter__(self):
     return iter(self.bound_sigma + [self.free_sigma])
 
+class Transcripts:
+  def __init__(self):
+    self.transcripts = {}
+
+  def add_transcript(self, transcript):
+    self.transcripts[transcript.tx_unit] = transcript
+
+  def get_transcript_for_tu(self, tx_unit):
+    return self.transcripts[tx_unit]
 
 # Make specifically bound and active states for RNAp on each operon
 def make_states(RNAp_states, tf_states, tx_unit, tu_length, direction):
@@ -317,9 +341,10 @@ def make_states(RNAp_states, tf_states, tx_unit, tu_length, direction):
   # Append transcription factor states
   tf_states.add_sigma_factor_bound(SigmaFactorBoundState(tx_unit = tu_name, direction = direc, desc = 'Sigma_Bound'))
 
+# Initialize states
 rnap_states = RNAp_states()
-
 tf_states = TF_states()
+transcripts = Transcripts()
 
 # Read transcription units and create states
 with open(args.tx_units[0]) as tx_f:
@@ -348,6 +373,8 @@ with open(args.tx_units[0]) as tx_f:
       tu_seq = ''.join([x for x in [gene_seq[g] for g in tu_genes]])
       tu_seq = tu_seq.replace('T', 'U') # DNA seq -> RNA seq
       #print(tu_seq)
+
+      transcripts.add_transcript(Transcript(tx_unit = tu_name, genes = tu_genes, seq = tu_seq))
 
       # Combinatorics for each param
       for direc in direc_range():
@@ -519,7 +546,35 @@ for init_state in rnap_states.init_active_states:
       state = nxt
   except MissingItemError:
     # At end of elongation
-    pass
+
+    # Termination reaction
+    r = model.createReaction()
+    check(r, 'create reaction')
+    check(r.setId('r_RNAp_termination_tu{}_d{}'.format(init_state.tx_unit, init_state.direction)), 'set reaction id')
+    check(r.setReversible(False), 'set reaction reversibility flag')
+    check(r.setFast(False), 'set reaction "fast" attribute')
+
+    # Create reactant: polymerase
+    reactant = r.createReactant()
+    check(reactant, 'create reactant')
+    check(reactant.setSpecies(state.id()), 'assign reactant species')
+    check(reactant.setConstant(False), 'set "constant" on species ref 1')
+
+    # Create product: finished transcript
+    transcript = transcripts.get_transcript_for_tu(state.tx_unit)
+    product = r.createProduct()
+    check(product, 'create product')
+    check(product.setSpecies(transcript.id()), 'assign product species')
+    check(product.setConstant(False), 'set "constant" on species ref 2')
+
+    # Create product: free polymerase
+    free_pol = rnap_states.free_RNAp
+    product = r.createProduct()
+    check(product, 'create product')
+    check(product.setSpecies(free_pol.id()), 'assign product species')
+    check(product.setConstant(False), 'set "constant" on species ref 2')
+
+
 
 sbmlstr = libsbml.writeSBMLToString(document)
 with open('/tmp/tx.sbml', 'w') as f:
