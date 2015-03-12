@@ -100,6 +100,13 @@ class RNApState(object):
   def id(self):
     return self.desc
 
+  def is_free(self):
+    return False
+
+class RNApFreeState(RNApState):
+  def is_free(self):
+    return True
+
 class RNApBoundState(RNApState):
   pass
 
@@ -225,7 +232,7 @@ class RNAp_states:
     #self.active_sigma_bound_RNAp = []
     self.spec_bound_RNAp = []
     self.ns_bound_RNAp = RNApBoundState('RNAp_NonSpecBound')
-    self.free_RNAp = RNApState('RNAp_Free')
+    self.free_RNAp = RNApFreeState('RNAp_Free')
 
   def index(self):
     self.active_state_for_locus = {}
@@ -451,7 +458,11 @@ for RNAp_state in rnap_states:
   check(spec.setId(idstr), 'set species spec id')
   check(spec.setCompartment('c1'), 'set species spec compartment')
   check(spec.setConstant(False), 'set "constant" attribute on spec')
-  check(spec.setInitialAmount(0), 'set initial amount for spec')
+  # Different initialization from MATLAB code
+  if not RNAp_state.is_free:
+    check(spec.setInitialAmount(0), 'set initial amount for spec')
+  else:
+    check(spec.setInitialAmount(50), 'set initial amount for spec')
   check(spec.setSubstanceUnits('item'), 'set substance units for spec')
   check(spec.setBoundaryCondition(False), 'set "boundaryCondition" on spec')
   check(spec.setHasOnlySubstanceUnits(False), 'set "hasOnlySubstanceUnits" on spec')
