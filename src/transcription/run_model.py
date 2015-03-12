@@ -7,7 +7,7 @@ Logger.setLevel(Logger.LOG_WARNING)
 rr = RoadRunner('/tmp/tx.sbml')
 #rr = RoadRunner('/tmp/tx-reduced.sbml')
 #rr = RoadRunner('/tmp/antsbml.xml')
-results = rr.simulate(0, 3, 3, integrator='gillespie')
+results = rr.simulate(0, 10, 30, integrator='gillespie')
 
 print(results)
 

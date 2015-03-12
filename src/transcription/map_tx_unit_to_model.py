@@ -546,13 +546,35 @@ for state in rnap_states.spec_bound_RNAp:
   check(sigma, 'create modifier')
   check(sigma.setSpecies(sigma_bound_state.id()), 'assign product species')
 
-  #math_ast = libsbml.parseL3Formula(sigma_bound_state.id())
-  math_ast = libsbml.parseL3Formula('1')
+  math_ast = libsbml.parseL3Formula('0.2*{}'.format(sigma_bound_state.id()))
+  #math_ast = libsbml.parseL3Formula('1')
   check(math_ast, 'create AST for rate expression')
 
   kinetic_law = r.createKineticLaw()
   check(kinetic_law, 'create kinetic law')
   check(kinetic_law.setMath(math_ast), 'set math on kinetic law')
+
+# Sigma factor binding
+for bound_sigma_state in tf_states.bound_sigma:
+  r = model.createReaction()
+  check(r, 'create reaction')
+  check(r.setId('bind_sigma_factor_{}'.format(bound_sigma_state.id())), 'set reaction id')
+  check(r.setReversible(False), 'set reaction reversibility flag')
+  check(r.setFast(False), 'set reaction "fast" attribute')
+
+  # Create reactant: specifically bound polymerase
+  reactant = r.createReactant()
+  check(reactant, 'create reactant')
+  check(reactant.setSpecies(tf_states.free_sigma.id()), 'assign reactant species')
+  check(reactant.setConstant(False), 'set "constant" on species ref 1')
+  check(reactant.setStoichiometry(1.), 'set stoichiometry')
+
+  # Create product: active polymerase
+  product = r.createProduct()
+  check(product, 'create product')
+  check(product.setSpecies(bound_sigma_state.id()), 'assign product species')
+  check(product.setConstant(False), 'set "constant" on species ref 2')
+  check(product.setStoichiometry(1.), 'set stoichiometry')
 
 if False:
 
